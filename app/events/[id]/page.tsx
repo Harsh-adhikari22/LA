@@ -1,4 +1,4 @@
-import { getEventById } from "@/lib/supabase/events"
+import { getEventById, getEventReviews, getStarDistribution } from "@/lib/supabase/events"
 import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -10,6 +10,9 @@ import { WhatsAppButton } from "@/components/whatsapp-button"
 import { Star, Phone, TrendingUpIcon as Trending } from "lucide-react"
 import { AddToCartButton } from "@/components/add-to-cart-button"
 import { createClient } from "@/lib/supabase/server"
+import { StarDistributionChart } from "@/components/star-distribution-chart"
+import { ReviewsSection } from "@/components/reviews-section"
+import { ReviewForm } from "@/components/review-form"
 
 interface EventDetailPageProps {
   params: Promise<{ id: string }>
@@ -22,6 +25,13 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
   // Get current user
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  // Fetch reviews and star distribution
+  const reviews = await getEventReviews(id)
+  const starDistribution = await getStarDistribution(id)
+  const averageRating = reviews.length > 0
+    ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
+    : 0
 
   if (!pkg) {
     notFound()
@@ -82,6 +92,22 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
               <p className="text-gray-700 text-lg leading-relaxed">{pkg.description}</p>
             </div>
+
+            {/* Star Distribution Chart */}
+            <StarDistributionChart 
+              distribution={starDistribution}
+              totalReviews={reviews.length}
+              averageRating={averageRating}
+            />
+
+            {/* Reviews Section */}
+            <ReviewsSection reviews={reviews} />
+
+            {/* Review Form */}
+            <ReviewForm 
+              eventId={id}
+              isAuthenticated={!!user}
+            />
           </div>
 
           {/* Booking Sidebar */}

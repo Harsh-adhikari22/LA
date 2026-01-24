@@ -7,9 +7,16 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Menu, X, User, LogOut, LogIn, MapIcon } from "lucide-react"
+import { Search, Menu, X, User, LogOut, LogIn, MapIcon, Package } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { usePathname, useRouter } from "next/navigation"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -188,14 +195,27 @@ export function Navbar() {
             
             {user ? (
               <div className="md:flex flex text-white items-center space-x-2 rajdhani hover:font-bold">
-                <Button variant="ghost" size="sm" className="h-[40px] rounded-full hover:shadow-[0_0_20px_white] hover:font-bold hover:text-black overflow-hidden transition-all duration-300 group">
-                  <User className="size-6" />
-                  <span className="max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100 transition-all duration-300 overflow-hidden whitespace-nowrap">{user.email?.split("@")[0]}</span>
-                </Button>
-                <Button variant="ghost" size="sm" onClick={handleSignOut} className="h-[40px] rounded-full hover:shadow-[0_0_20px_white] hover:font-bold hover:text-black overflow-hidden transition-all duration-300 group">
-                  <LogOut className="size-6" />
-                  <span className="max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100 transition-all duration-300 overflow-hidden whitespace-nowrap">Sign Out</span>
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-[40px] rounded-full hover:shadow-[0_0_20px_white] hover:font-bold hover:text-black overflow-hidden transition-all duration-300 group">
+                      <User className="size-6" />
+                      <span className="max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100 transition-all duration-300 overflow-hidden whitespace-nowrap">{user.email?.split("@")[0]}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/orders" className="flex items-center gap-2 cursor-pointer">
+                        <Package className="size-4" />
+                        My Orders
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
+                      <LogOut className="size-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ) : (
               <div className="flex text-white items-center space-x-2 rajdhani">
@@ -258,6 +278,10 @@ export function Navbar() {
               {user ? (
                 <>
                   <span className="text-sm text-gray-600">Welcome, {user.email?.split("@")[0]}</span>
+                  <Link href="/orders" className="text-gray-700 hover:text-primary py-2 flex items-center gap-2">
+                    <Package className="size-4" />
+                    My Orders
+                  </Link>
                   <Button variant="ghost" size="sm" onClick={handleSignOut} className="justify-start">
                     Sign Out
                   </Button>

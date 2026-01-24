@@ -1,15 +1,13 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle, Home, Download } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { CheckCircle, Home } from "lucide-react"
+import Link from "next/link"
+import { createClient } from "@/lib/supabase/server"
 import { getOrderWithItems } from "@/lib/supabase/orders"
+import { redirect } from "next/navigation"
 
 interface OrderItem {
   id: string
@@ -41,56 +39,30 @@ interface PageProps {
   params: Promise<{ id: string }>
 }
 
-export default function OrderSuccessPage({ params }: PageProps) {
-  const [order, setOrder] = useState<Order | null>(null)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const supabase = createClient()
+export default async function OrderSuccessPage({ params }: PageProps) {
+  const supabase = await createClient()
+  const { id } = await params
 
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const { id } = await params
+  // Verify user authentication
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    redirect("/auth/login")
+  }
 
-        // Verify user authentication
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
-          router.push("/auth/login")
-          return
-        }
-
-        // Fetch order details
-        const orderData = await getOrderWithItems(id)
-        
-        // Verify order belongs to current user
-        if (orderData.user_id !== user.id) {
-          router.push("/")
-          return
-        }
-
-        setOrder(orderData as Order)
-      } catch (error) {
-        console.error("Error fetching order:", error)
-        router.push("/")
-      } finally {
-        setLoading(false)
-      }
+  // Fetch order details
+  let order: Order | null = null
+  try {
+    const orderData = await getOrderWithItems(id)
+    
+    // Verify order belongs to current user
+    if (orderData.user_id !== user.id) {
+      redirect("/")
     }
-
-    fetchOrder()
-  }, [params, supabase, router])
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex justify-center items-center h-96">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          </div>
-        </div>
-      </main>
-    )
+    
+    order = orderData as Order
+  } catch (error) {
+    console.error("Error fetching order:", error)
+    redirect("/")
   }
 
   if (!order) {
@@ -114,7 +86,7 @@ export default function OrderSuccessPage({ params }: PageProps) {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Success Message */}
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 mb-8">
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 mb-8 py-6">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <CheckCircle className="w-16 h-16 text-green-600 mb-4" />
             <h1 className="text-3xl font-bold text-green-900 mb-2">Order Confirmed!</h1>
@@ -126,7 +98,7 @@ export default function OrderSuccessPage({ params }: PageProps) {
           {/* Order Details */}
           <div className="lg:col-span-2 space-y-6">
             {/* Order Number & Status */}
-            <Card>
+            <Card className="py-6">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Order Details</span>
@@ -158,7 +130,7 @@ export default function OrderSuccessPage({ params }: PageProps) {
             </Card>
 
             {/* Order Items */}
-            <Card>
+            <Card className="py-6">
               <CardHeader>
                 <CardTitle>Order Items</CardTitle>
               </CardHeader>
@@ -181,7 +153,7 @@ export default function OrderSuccessPage({ params }: PageProps) {
             </Card>
 
             {/* Shipping Details */}
-            <Card>
+            <Card className="py-6">
               <CardHeader>
                 <CardTitle>Delivery Address</CardTitle>
               </CardHeader>
@@ -197,7 +169,7 @@ export default function OrderSuccessPage({ params }: PageProps) {
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24">
+            <Card className="sticky top-24 py-6">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
@@ -230,20 +202,23 @@ export default function OrderSuccessPage({ params }: PageProps) {
                   </p>
                 </div>
 
+
                 <div className="space-y-2 pt-4">
                   <Button
-                    onClick={() => router.push("/")}
+                    asChild
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
                   >
-                    <Home className="w-4 h-4" />
-                    Continue Shopping
+                    <Link href="/">
+                      <Home className="w-4 h-4" />
+                      Continue Shopping
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Next Steps */}
-            <Card className="mt-6">
+            <Card className="mt-6 py-6">
               <CardHeader>
                 <CardTitle className="text-base">What's Next?</CardTitle>
               </CardHeader>

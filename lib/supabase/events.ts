@@ -130,3 +130,58 @@ export async function getAvailablePackages(): Promise<EventFormData[]> {
   }
   return data || []
 }
+
+export interface Review {
+  id: string
+  user_id: string
+  event_id: string
+  stars: number
+  review: string | null
+  created_at: string
+  profiles?: {
+    full_name: string | null
+    email: string | null
+  }
+}
+
+export async function getEventReviews(eventId: string): Promise<Review[]> {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(`
+      *,
+      profiles(full_name, email)
+    `)
+    .eq("event_id", eventId)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("Error fetching reviews:", error)
+    return []
+  }
+
+  return data || []
+}
+
+export interface StarDistribution {
+  stars: number
+  count: number
+  percentage: number
+}
+
+export async function getStarDistribution(eventId: string): Promise<StarDistribution[]> {
+  const reviews = await getEventReviews(eventId)
+  const distribution: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+
+  reviews.forEach((review) => {
+    if (review.stars >= 1 && review.stars <= 5) {
+      distribution[review.stars]++
+    }
+  })
+
+  const total = reviews.length || 1
+  return [1, 2, 3, 4, 5].map((stars) => ({
+    stars,
+    count: distribution[stars],
+    percentage: (distribution[stars] / total) * 100,
+  }))
+}
