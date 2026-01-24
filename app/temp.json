@@ -1,0 +1,143 @@
+{
+    "header": {},
+    "payload": {
+        "eligibleForLeanMode": true,
+        "markedByLeanMode": false,
+        "promiseList": [
+            {
+                "promiseDetails": {
+                    "messageID": "47414c42-7865-4a80-99e3-42f2bf93acbe",
+                    "fulfillmentDetails": {
+                        "fulfillmentOption": "S2H",
+                        "shipmentMethod": "STANDARD",
+                        "eligibleforDFCAddressEligibility": false,
+                        "bypassDFCEligibility": false,
+                        "bypassDFCCartDimensionCheck": false,
+                        "shippingAddress": {
+                            "isLoadingDockAvailable": false,
+                            "isApoFpo": false,
+                            "isPoBox": false,
+                            "addressLineOne": "{masked}",
+                            "addressType": "RESIDENTIAL",
+                            "city": "{masked}",
+                            "countryCode": "US",
+                            "postalCode": "{masked}",
+                            "stateOrProvinceCode": "{masked}"
+                        }
+                    },
+                    "promiseLines": [
+                        {
+                            "itemIdentifier": {
+                                "itemNumber": "980252000",
+                                "merchandiseCategory": "49"
+                            },
+                            "offerID": {
+                                "offerId": "55390387",
+                                "storeIds": [],
+                                "shipCostType": "CALCULATED"
+                            },
+                            "lineId": "li-4eec4c49-7ea0-4abc-858f-d7911ef93c0f",
+                            "quantity": {
+                                "unitOfMeasure": "EACH",
+                                "measurementValue": 2
+                            },
+                            "productClass": "STANDARD",
+                            "markedByLeanMode": false
+                        },
+                        {
+                            "itemIdentifier": {
+                                "itemNumber": "990419220",
+                                "merchandiseCategory": "49"
+                            },
+                            "offerID": {
+                                "offerId": "380294688",
+                                "storeIds": [],
+                                "shipCostType": "CALCULATED"
+                            },
+                            "lineId": "li-a3ac0d94-fc27-4057-af79-935fcdcd4736",
+                            "quantity": {
+                                "unitOfMeasure": "EACH",
+                                "measurementValue": 2
+                            },
+                            "productClass": "STANDARD",
+                            "markedByLeanMode": false
+                        },
+                        {
+                            "itemIdentifier": {
+                                "itemNumber": "662368",
+                                "merchandiseCategory": "94"
+                            },
+                            "offerID": {
+                                "offerId": "37989538",
+                                "storeIds": [],
+                                "shipCostType": "CALCULATED"
+                            },
+                            "lineId": "li-abd3e80b-02b7-4427-a084-7ca887ca5a84",
+                            "quantity": {
+                                "unitOfMeasure": "EACH",
+                                "measurementValue": 1
+                            },
+                            "productClass": "STANDARD",
+                            "markedByLeanMode": false
+                        },
+                        {
+                            "itemIdentifier": {
+                                "itemNumber": "990005479",
+                                "merchandiseCategory": "13"
+                            },
+                            "offerID": {
+                                "offerId": "380143260",
+                                "storeIds": [],
+                                "shipCostType": "CALCULATED"
+                            },
+                            "lineId": "li-a9b0c090-ad64-488a-8214-2498bf9adcd9",
+                            "quantity": {
+                                "unitOfMeasure": "EACH",
+                                "measurementValue": 1
+                            },
+                            "productClass": "STANDARD",
+                            "markedByLeanMode": false
+                        },
+                        {
+                            "itemIdentifier": {
+                                "itemNumber": "990009240",
+                                "merchandiseCategory": "13"
+                            },
+                            "offerID": {
+                                "offerId": "380010457",
+                                "storeIds": [],
+                                "shipCostType": "CALCULATED"
+                            },
+                            "lineId": "li-c30bc128-529e-4522-8973-8f24d8f5ea95",
+                            "quantity": {
+                                "unitOfMeasure": "EACH",
+                                "measurementValue": 1
+                            },
+                            "productClass": "STANDARD",
+                            "markedByLeanMode": false
+                        },
+                        {
+                            "itemIdentifier": {
+                                "itemNumber": "980022772",
+                                "merchandiseCategory": "94"
+                            },
+                            "offerID": {
+                                "offerId": "53537959",
+                                "storeIds": [],
+                                "shipCostType": "CALCULATED"
+                            },
+                            "lineId": "li-108d1cad-8fe2-4d7b-bd7c-d8085662eff3",
+                            "quantity": {
+                                "unitOfMeasure": "EACH",
+                                "measurementValue": 1
+                            },
+                            "productClass": "STANDARD",
+                            "markedByLeanMode": false
+                        }
+                    ],
+                    "orderID": "ca-49e90cf0-1f06-4c5e-b042-0da75bf64def"
+                }
+            }
+        ]
+    }
+}

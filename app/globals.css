@@ -1,0 +1,387 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Saphifen Font */
+@font-face {
+  font-family: 'Saphifen';
+  src: url('/fonts/Saphifen.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MDMA';
+  src: url('/fonts/MDMA.ttf') format('truetype');
+}
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* Updated primary color to VPrimeTours blue #0080FE */
+  --primary: oklch(0.6 0.25 250);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Added smooth animations and custom styles for VPrimeTours */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 1s ease-out;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #0080fe 0%, #0066cc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from{
+    opacity: 0;
+    width: 0%;
+  }
+  to{
+    opacity: 1;
+    width: 100%;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.search-group .search-icon {
+  transition: filter 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.search-group:hover .search-icon {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.85));
+  transform: scale(1.05);
+  color: #ffffff; /* Tailwind blue-500 (your "primary") */
+}
+/* Search input hidden by default */
+.search-group .search-input {
+  width: 0;
+  opacity: 0;
+  padding-left: 0;
+  border: 0;
+  transition: all 0.3s ease;
+}
+
+/* Expand input when hovering group */
+.search-group:hover .search-input {
+  width: 14rem;   /* same as Tailwind w-64 */
+  opacity: 1;
+  padding-left: 13px; /* same as Tailwind pl-10 */
+}
+
+@keyframes glow-pulse {
+  0% {
+    text-shadow: 0 0 8px #9ec3ff, 0 0 12px #9ec3ff;
+    color: #9ec3ff; /* blue-500 */
+  }
+  25% {
+    text-shadow: 0 0 8px #96ffbc, 0 0 12px #22c55e;
+    color: #96ffbc; /* green-500 */
+  }
+  50% {
+    text-shadow: 0 0 8px #ffe28a, 0 0 12px #eab308;
+    color: #ffe28a; /* yellow-500 */
+  }
+  75% {
+    text-shadow: 0 0 8px #ff9d9d, 0 0 12px #ef4444;
+    color: #ff9d9d; /* red-500 */
+  }
+  100% {
+    text-shadow: 0 0 8px #9ec3ff, 0 0 12px #9ec3ff;
+    color: #9ec3ff;
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s infinite ease-in-out;
+}
+
+.fancy-adventure {
+    /* Saphifen font in original style - no modifications */
+    font-family: 'Saphifen', 'Permanent Marker', 'Shadows Into Light', cursive;
+    font-size: clamp(3rem, 10vw, 7rem); /* Responsive font size */
+    font-weight: normal;
+    line-height: 1.2;
+    padding: 10px;
+}
+
+/* --- New Flowing Glow Effect --- */
+
+.scrolling-glow {
+    /* 1. Create sharp color blocks for a "wash" effect: R-B-G-Y-R */
+    background: linear-gradient(
+        to right,
+        /* RED Block */
+        #ff9d9d 0%, #ff9d9d 20%, 
+        /* BLUE Block */
+        #9ec3ff 20%, #9ec3ff 40%, 
+        /* GREEN Block */
+        #96ffbc 40%, #96ffbc 60%, 
+        /* YELLOW Block */
+        #ffe28a 60%, #ffe28a 80%, 
+        /* RED Loop Block */
+        #ff9d9d 80%, #ff9d9d 100%
+    );
+    
+    /* 2. Make the background size 500% to ensure one color block covers the text at a time (5 blocks * 100% = 500%) */
+    background-size: 500% 100%;
+    
+    /* 3. Clip the background to the text shape */
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    /* 4. Make the actual text transparent so the background shows through */
+    -webkit-text-fill-color: transparent;
+    
+    /* 5. Apply the animation (Duration: 8s) */
+    animation: flowing-color-wash 8s infinite linear;
+    
+    /* Default shadow color (Red) - REDUCED BLUR FOR SHARPER GLOW */
+    text-shadow: 0 0 8px #ff9d9d, 0 0 12px #ff9d9d;
+}
+
+/* Define the animation keyframes */
+@keyframes flowing-color-wash {
+    /* 0% - RED starts to flow across */
+    0% {
+        /* Background position starts at 0% */
+        background-position: 0% 0;
+        /* Sharper glow */
+        text-shadow: 0 0 8px #ff9d9d, 0 0 12px #ff9d9d; 
+    }
+    /* 25% - Red has flowed out, BLUE is now dominant */
+    25% {
+        /* Moves 100% of text width to the left */
+        background-position: -100% 0; 
+        /* Sharper glow */
+        text-shadow: 0 0 8px #9ec3ff, 0 0 12px #9ec3ff;
+    }
+    /* 50% - Blue has flowed out, GREEN is now dominant */
+    50% {
+        /* Moves 200% of text width to the left */
+        background-position: -200% 0;
+        /* Sharper glow */
+        text-shadow: 0 0 8px #96ffbc, 0 0 12px #96ffbc; 
+    }
+    /* 75% - Green has flowed out, YELLOW is now dominant */
+    75% {
+        /* Moves 300% of text width to the left */
+        background-position: -300% 0;
+        /* Sharper glow */
+        text-shadow: 0 0 8px #ffe28a, 0 0 12px #ffe28a;
+    }
+    /* 100% - Yellow has flowed out, RED loops in from the right */
+    100% {
+        /* Moves 400% of text width to the left (completing the full cycle) */
+        background-position: -400% 0;
+        /* Sharper glow */
+        text-shadow: 0 0 8px #ff9d9d, 0 0 12px #ff9d9d;
+    }
+}
+
+.rajdhani{
+  font-family: 'Rajdhani', sans-serif
+}
+
+.saphifen{
+  font-family: 'Saphifen', 'Permanent Marker', 'Shadows Into Light', cursive;
+}
+
+.higher-jump{
+  font-family: 'Higher Jump', cursive;
+}
+
+.mdma{
+  font-family: 'MDMA', sans-serif;
+}
+
+/* Option 1 Font Classes */
+.hero-heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hero-subheading {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.hero-decorative {
+  /* Saphifen font in original style - no modifications */
+  font-family: 'Saphifen', 'Permanent Marker', 'Shadows Into Light', cursive;
+  font-size: clamp(6rem, 20vw, 14rem); /* Doubled the size */
+  font-weight: normal;
+  color: #FFD700; /* Yellow color */
+}
+
+.hero-body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}

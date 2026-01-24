@@ -1,0 +1,16 @@
+{
+    "url": "https://grafana.mms.walmart.net/d/vBBwB4_bc/veda-cumulative-dashboard?orgId=1&from=now-24h&to=now&refresh=15m&timezone=browser&var-datasource=production",
+    "waitFor": [
+    ],
+    "viewPort": {
+        "width": 1920,
+        "height": 1080
+    },
+    "explicitWaitBeforeCapture": 10000,
+    "scroll": {
+        "x": 0,
+        "y": 250
+    },
+    "zoom": 60,
+    "loginType": "pingfed"
+}
