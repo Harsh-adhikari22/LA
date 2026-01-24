@@ -8,6 +8,8 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { Star, Phone, TrendingUpIcon as Trending } from "lucide-react"
+import { AddToCartButton } from "@/components/add-to-cart-button"
+import { createClient } from "@/lib/supabase/server"
 
 interface EventDetailPageProps {
   params: Promise<{ id: string }>
@@ -16,6 +18,10 @@ interface EventDetailPageProps {
 export default async function EventDetailPage({ params }: EventDetailPageProps) {
   const { id } = await params
   const pkg = await getEventById(id)
+  
+  // Get current user
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
   if (!pkg) {
     notFound()
@@ -101,6 +107,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 <CardContent className="space-y-4">
                   <Separator />
                   <div className="space-y-3">
+                    <AddToCartButton eventId={id} price={Number(pkg.discounted_price ?? 0)} userId={user?.id} />
                     <a href="/contact">
                       <Button variant="outline" className="w-full bg-transparent">
                         <Phone className="w-4 h-4 mr-2" />
