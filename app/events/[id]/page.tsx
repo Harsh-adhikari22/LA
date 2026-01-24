@@ -2,21 +2,20 @@ import { getEventById } from "@/lib/supabase/events"
 import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { WhatsAppButton } from "@/components/whatsapp-button"
-import { MapPin, Clock, Users, Star, Check, X, Calendar, Phone, Award, TrendingUpIcon as Trending, Link } from "lucide-react"
+import { Star, Phone, TrendingUpIcon as Trending } from "lucide-react"
 
 interface EventDetailPageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 export default async function EventDetailPage({ params }: EventDetailPageProps) {
-  const pkg = await getEventById(params.id)
+  const { id } = await params
+  const pkg = await getEventById(id)
 
   if (!pkg) {
     notFound()
@@ -54,104 +53,28 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
               </div>
             </div>
 
-            {/* Package Info */}
+            {/* Event Info */}
             <div className="bg-white rounded-lg p-6 shadow-sm animate-fade-in-up animate-delay-100">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{pkg.title}</h1>
                   <div className="flex items-center gap-4 text-gray-600">
-                    {pkg.location && (
-                      <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-1" />
-                        {pkg.location}
-                      </div>
-                    )}
                     <div className="flex items-center text-yellow-500">
                       <Star className="w-4 h-4 fill-current mr-1" />
-                      <span className="text-gray-600">4.8 (124 reviews)</span>
+                      <span className="text-gray-600">
+                        {Number(pkg.rating)?.toFixed(1) ?? "—"} ({pkg.reviews_count ?? 0} reviews)
+                      </span>
                     </div>
                   </div>
                 </div>
-                {pkg.category && (
+                {pkg.categories?.title && (
                   <Badge variant="outline" className="text-sm">
-                    {pkg.category}
+                    {pkg.categories.title}
                   </Badge>
                 )}
               </div>
 
               <p className="text-gray-700 text-lg leading-relaxed">{pkg.description}</p>
-            </div>
-
-            {/* Package Details */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in-up animate-delay-200">
-              {pkg.duration_hours && (
-                <Card className="py-6">
-                  <CardContent className="p-4 text-center">
-                    <Clock className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <div className="font-semibold">{pkg.duration_hours} Hours</div>
-                    <div className="text-sm text-gray-600">Duration</div>
-                  </CardContent>
-                </Card>
-              )}
-              
-              {pkg.event_date && (
-                <Card className="py-6">
-                  <CardContent className="p-4 text-center">
-                    <Calendar className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <div className="font-semibold">{new Date(pkg.event_date).toLocaleDateString()}</div>
-                    <div className="text-sm text-gray-600">Event Date</div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {pkg.max_capacity && (
-                <Card className="py-6">
-                  <CardContent className="p-4 text-center">
-                    <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <div className="font-semibold">Up to {pkg.max_capacity}</div>
-                    <div className="text-sm text-gray-600">Group Size</div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Inclusions & Exclusions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up animate-delay-400">
-              {pkg.inclusions && pkg.inclusions.length > 0 && (
-                <Card className="py-6">
-                  <CardHeader>
-                    <CardTitle className="text-green-600">What's Included</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {pkg.inclusions.map((inclusion, index) => (
-                        <div key={index} className="flex items-center">
-                          <Check className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{inclusion}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {pkg.exclusions && pkg.exclusions.length > 0 && (
-                <Card className="py-6">
-                  <CardHeader>
-                    <CardTitle className="text-red-600">What's Not Included</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {pkg.exclusions.map((exclusion, index) => (
-                        <div key={index} className="flex items-center">
-                          <X className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{exclusion}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
             </div>
           </div>
 
@@ -162,29 +85,21 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 <CardHeader>
                   <div className="text-center">
                     <p className="text-sm text-gray-600">Starting from</p>
-                    <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="flex items-center justify-center gap-2 mb-2 flex-wrap">
+                      {pkg.actual_price != null && Number(pkg.actual_price) > Number(pkg.discounted_price) && (
+                        <span className="text-lg text-gray-500 line-through">
+                          ₹{Number(pkg.actual_price).toLocaleString()}
+                        </span>
+                      )}
                       <span className="text-3xl font-bold text-primary">
-                        ₹{pkg.price?.toLocaleString() || "Contact"}
+                        ₹{Number(pkg.discounted_price ?? 0).toLocaleString()}
                       </span>
                     </div>
-                    <Badge
-                      variant={
-                        pkg.is_available === true
-                          ? "default"
-                          : "destructive"
-                      }
-                      className="mt-2 capitalize"
-                    >
-                      {pkg.is_available === false
-                        ? "Sold Out"
-                        : "Available"}
-                    </Badge>
                   </div>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
                   <Separator />
-
                   <div className="space-y-3">
                     <a href="/contact">
                       <Button variant="outline" className="w-full bg-transparent">
@@ -193,7 +108,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                       </Button>
                     </a>
                   </div>
-
                   <Separator />
                 </CardContent>
               </Card>

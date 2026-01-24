@@ -1,7 +1,13 @@
 import { updateSession } from "@/lib/supabase/middleware"
-import type { NextRequest } from "next/server"
+import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
+  // Redirect malformed /search&category=... (missing ?) to /search?category=...
+  const path = request.nextUrl.pathname
+  if (path.startsWith("/search&")) {
+    const fixed = "/search?" + path.slice("/search&".length)
+    return NextResponse.redirect(new URL(fixed, request.url))
+  }
   return await updateSession(request)
 }
 
