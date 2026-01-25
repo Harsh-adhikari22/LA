@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { LayoutDashboard, Package, Users, BookOpen, Settings, Menu, X, LogOut, Plus } from "lucide-react"
+
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
@@ -14,7 +15,7 @@ const navigation = [
   { name: "Party Packages", href: "/admin/packages", icon: Package },
   { name: "Bookings", href: "/admin/bookings", icon: BookOpen },
   { name: "Users", href: "/admin/users", icon: Users },
-  { name: "Settings", href: "/admin/settings", icon: Settings },
+  { name: "Categories", href: "/admin/categories", icon: Settings },
 ]
 
 export function AdminSidebar() {
@@ -53,7 +54,7 @@ export function AdminSidebar() {
           {/* Logo */}
           <div className="flex items-center px-6 py-4 border-b border-gray-200">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">V</span>
+              <span className="text-white font-bold text-lg">LA</span>
             </div>
             <span className="ml-2 text-xl font-bold gradient-text">LitAffairs</span>
           </div>

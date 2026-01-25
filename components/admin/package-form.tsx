@@ -15,23 +15,21 @@ import { Badge } from "@/components/ui/badge"
 import { X, Plus, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "@/hooks/use-toast"
+import { log } from "console"
 
 interface PackageFormData {
+  id: string
   title: string
   description: string
-  price: number
-  duration_hours: number
-  max_capacity: number
-  available_spots: number
+  discounted_price: number
+  actual_price: number
+  rating: number
+  reviews_count: number
+  trending: boolean
   category: string
-  location: string
-  event_date: string
   image_url: string
-  gallery_urls: string[]
-  inclusions: string[]
-  exclusions: string[]
-  is_trending: boolean
-  is_available: boolean
+  created_at: string
+  additional_images: string[]
 }
 
 interface PackageFormProps {
@@ -44,48 +42,57 @@ export function PackageForm({ initialData, packageId, mode }: PackageFormProps) 
   const [formData, setFormData] = useState<PackageFormData>({
     title: "",
     description: "",
-    price: 0,
-    duration_hours: 4,
-    max_capacity: 10,
-    available_spots: 10,
+    actual_price: 0,
+    discounted_price: 0,
     category: "",
-    location: "",
-    event_date: "",
     image_url: "",
-    gallery_urls: [],
-    inclusions: [],
-    exclusions: [],
-    is_trending: false,
-    is_available: true,
+    additional_images: [],
+    trending: false,
+    id: "",
+    created_at: "",
+    rating: 0,
+    reviews_count: 0,
     ...initialData,
   })
 
-  const [newInclusion, setNewInclusion] = useState("")
-  const [newExclusion, setNewExclusion] = useState("")
-  const [newGalleryUrl, setNewGalleryUrl] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploadingMain, setIsUploadingMain] = useState(false)
   const [uploadingGallery, setUploadingGallery] = useState<string[]>([]) // store filenames being uploaded
   const [buckets, setBuckets] = useState<string[]>([])
   const [mainImageFile, setMainImageFile] = useState<File | null>(null)
   const [galleryFiles, setGalleryFiles] = useState<File[]>([])
-
+  const [categories, setCategories] = useState<{ id: string; title: string }[]>([])
 
   const router = useRouter()
   const supabase = createClient()
 
-  const categories = [
-    "Birthday",
-    "Wedding",
-    "Corporate",
-    "Anniversary",
-    "Graduation",
-    "Baby Shower",
-    "Engagement",
-    "Housewarming",
-    "Festival",
-    "Custom Event",
-  ]
+  useEffect(() => {
+  const loadCategories = async () => {
+    console.log("Loading categories...")
+
+    const { data, error } = await supabase
+      .from("categories")
+      .select("id,title")
+
+    if (error) {
+      console.error("Category fetch error:", error)
+
+      toast({
+        title: "Category Error",
+        description: error.message,
+        variant: "destructive",
+      })
+
+      return
+    }
+
+    console.log("Fetched categories:", data)
+    setCategories(data ?? [])
+  }
+
+  loadCategories()
+}, [])
+
 
   useEffect(() => {
     fetch("/api/admin/buckets")
@@ -98,54 +105,11 @@ export function PackageForm({ initialData, packageId, mode }: PackageFormProps) 
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const addInclusion = () => {
-    if (newInclusion.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        inclusions: [...prev.inclusions, newInclusion.trim()],
-      }))
-      setNewInclusion("")
-    }
-  }
-
-  const removeInclusion = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      inclusions: prev.inclusions.filter((_, i) => i !== index),
-    }))
-  }
-
-  const addExclusion = () => {
-    if (newExclusion.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        exclusions: [...prev.exclusions, newExclusion.trim()],
-      }))
-      setNewExclusion("")
-    }
-  }
-
-  const removeExclusion = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      exclusions: prev.exclusions.filter((_, i) => i !== index),
-    }))
-  }
-
-  const addGalleryUrl = () => {
-    if (newGalleryUrl.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        gallery_urls: [...prev.gallery_urls, newGalleryUrl.trim()],
-      }))
-      setNewGalleryUrl("")
-    }
-  }
 
   const removeGalleryUrl = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      gallery_urls: prev.gallery_urls.filter((_, i) => i !== index),
+      gallery_urls: prev.additional_images.filter((_, i) => i !== index),
     }))
   }
 
@@ -176,14 +140,14 @@ async function handleFileUpload(file: File, bucket: string): Promise<string> {
 async function uploadMainImage() {
   if (!mainImageFile) return ""
   console.log("main Image : ",mainImageFile)
-  return await handleFileUpload(mainImageFile, "Images")
+  return await handleFileUpload(mainImageFile, "Categories")
 }
 
 async function uploadGalleryImages() {
   const urls: string[] = []
   console.log("gallery images",galleryFiles)
   for (const file of galleryFiles) {
-    const url = await handleFileUpload(file, "Images")
+    const url = await handleFileUpload(file, "Categories")
     urls.push(url)
   }
   return urls
@@ -207,18 +171,21 @@ const handleSubmit = async (e: React.FormEvent) => {
     const payload = {
       ...formData,
       image_url: mainImageUrl || formData.image_url,
-      gallery_urls: galleryUrls,
+      additional_images: galleryUrls.length
+      ? galleryUrls
+      : formData.additional_images,
+      ...(packageId && { id: packageId }),
     }
 
     // 4️⃣ Send to server API
     const res = await fetch("/api/admin/packages", {
-      method: "POST",
+      method: mode === "create" ? "POST" : "PUT",
       body: JSON.stringify(payload),
     })
     const data = await res.json()
-    if (!res.ok) throw new Error(data.error || "Failed to save package")
+    if (!res.ok) throw new Error(data.error || "Failed to save event")
 
-    toast({ title: "Success", description: "Package saved successfully!" })
+    toast({ title: "Success", description: `Event ${mode === "create" ? "created" : "updated"} successfully!` })
     router.push("/admin/packages")
   } catch (err: any) {
     toast({ title: "Error", description: err.message, variant: "destructive" })
@@ -239,12 +206,12 @@ const handleSubmit = async (e: React.FormEvent) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="title">Package Title *</Label>
+              <Label htmlFor="title">Event Title *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
-                placeholder="Elegant Birthday Party Package"
+                placeholder="Elegant Birthday Party"
                 required
               />
             </div>
@@ -255,119 +222,62 @@ const handleSubmit = async (e: React.FormEvent) => {
                 id="description"
                 value={formData.description}
                 onChange={(e) => handleInputChange("description", e.target.value)}
-                placeholder="Describe your party package..."
+                placeholder="Describe your event..."
                 rows={4}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="location">Location/Venue *</Label>
-                <Input
-                  id="location"
-                  value={formData.location}
-                  onChange={(e) => handleInputChange("location", e.target.value)}
-                  placeholder="Delhi, India"
-                  required
-                />
-              </div>
+            <div>
+              <Label htmlFor="category">Event Category</Label>
+              <Select
+                value={formData.category}
+                onValueChange={(value) => handleInputChange("category", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select event category" />
+                </SelectTrigger>
 
-              <div>
-                <Label htmlFor="category">Party Type</Label>
-                <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select party type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         </Card>
 
-        {/* Pricing & Capacity */}
+        {/* Pricing */}
         <Card className="py-6">
           <CardHeader>
-            <CardTitle>Pricing & Capacity</CardTitle>
+            <CardTitle>Pricing</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="price">Price (USD) *</Label>
+            <Label htmlFor="actual_price">Actual Price (₹)</Label>
               <Input
-                id="price"
+                id="actual_price"
                 type="number"
-                value={formData.price}
-                onChange={(e) => handleInputChange("price", Number.parseFloat(e.target.value) || 0)}
-                placeholder="1299"
+                value={formData.actual_price}
+                onChange={(e) =>
+                  handleInputChange("actual_price", Number.parseFloat(e.target.value) || 0)
+                }
                 min="0"
-                step="0.01"
-                required
               />
             </div>
 
             <div>
-              <Label htmlFor="duration">Duration (hours) *</Label>
+              <Label htmlFor="discounted_price">Discounted / Updated Price (₹)</Label>
               <Input
-                id="duration"
+                id="discounted_price"
                 type="number"
-                value={formData.duration_hours}
-                onChange={(e) => handleInputChange("duration_hours", Number.parseInt(e.target.value) || 4)}
-                placeholder="4"
-                min="1"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="max_capacity">Max Capacity *</Label>
-                <Input
-                  id="max_capacity"
-                  type="number"
-                  value={formData.max_capacity}
-                  onChange={(e) => handleInputChange("max_capacity", Number.parseInt(e.target.value) || 1)}
-                  placeholder="20"
-                  min="1"
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="available_spots">Available Spots *</Label>
-                <Input
-                  id="available_spots"
-                  type="number"
-                  value={formData.available_spots}
-                  onChange={(e) => handleInputChange("available_spots", Number.parseInt(e.target.value) || 0)}
-                  placeholder="15"
-                  min="0"
-                  max={formData.max_capacity}
-                  required
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Event Date */}
-        <Card className="py-6">
-          <CardHeader>
-            <CardTitle>Event Date</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="event_date">Event Date</Label>
-              <Input
-                id="event_date"
-                type="date"
-                value={formData.event_date}
-                onChange={(e) => handleInputChange("event_date", e.target.value)}
+                value={formData.discounted_price}
+                onChange={(e) =>
+                  handleInputChange("discounted_price", Number.parseFloat(e.target.value) || 0)
+                }
+                min="0"
               />
             </div>
           </CardContent>
@@ -421,19 +331,20 @@ const handleSubmit = async (e: React.FormEvent) => {
               />
 
               <div className="flex flex-wrap gap-2 mt-2">
-                {formData.gallery_urls.map((url, index) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={url}
-                      alt={`Gallery ${index + 1}`}
-                      className="w-28 h-20 object-cover rounded-lg border"
-                    />
-                    <X
-                      className="absolute top-1 right-1 w-4 h-4 cursor-pointer bg-white rounded-full"
-                      onClick={() => removeGalleryUrl(index)}
-                    />
-                  </div>
-                ))}
+                {Array.isArray(formData.additional_images) &&
+                  formData.additional_images.map((url, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={url}
+                        alt={`Gallery ${index + 1}`}
+                        className="w-28 h-20 object-cover rounded-lg border"
+                      />
+                      <X
+                        className="absolute top-1 right-1 w-4 h-4 cursor-pointer bg-white rounded-full"
+                        onClick={() => removeGalleryUrl(index)}
+                      />
+                    </div>
+                  ))}
 
                 {/* Show spinners for files still uploading */}
                 {uploadingGallery.map((filename) => (
@@ -452,90 +363,22 @@ const handleSubmit = async (e: React.FormEvent) => {
         </Card>
       </div>
 
-      {/* Inclusions & Exclusions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="py-6">
-          <CardHeader>
-            <CardTitle>Inclusions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                value={newInclusion}
-                onChange={(e) => setNewInclusion(e.target.value)}
-                placeholder="e.g., Decorations, catering"
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addInclusion())}
-              />
-              <Button type="button" onClick={addInclusion} size="icon">
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.inclusions.map((inclusion, index) => (
-                <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                  {inclusion}
-                  <X className="w-3 h-3 cursor-pointer" onClick={() => removeInclusion(index)} />
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="py-6">
-          <CardHeader>
-            <CardTitle>Exclusions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                value={newExclusion}
-                onChange={(e) => setNewExclusion(e.target.value)}
-                placeholder="e.g., Alcohol, transportation"
-                onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addExclusion())}
-              />
-              <Button type="button" onClick={addExclusion} size="icon">
-                <Plus className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.exclusions.map((exclusion, index) => (
-                <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                  {exclusion}
-                  <X className="w-3 h-3 cursor-pointer" onClick={() => removeExclusion(index)} />
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
+      
       {/* Settings */}
       <Card className="py-6">
         <CardHeader>
-          <CardTitle>Package Settings</CardTitle>
+          <CardTitle>Event Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="is_trending">Trending Package</Label>
-              <p className="text-sm text-gray-600">Mark this package as trending to feature it prominently</p>
+              <Label htmlFor="is_trending">Trending Event</Label>
+              <p className="text-sm text-gray-600">Mark this event as trending to feature it prominently</p>
             </div>
             <Switch
               id="is_trending"
-              checked={formData.is_trending}
-              onCheckedChange={(checked) => handleInputChange("is_trending", checked)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="is_available">Available for Booking</Label>
-              <p className="text-sm text-gray-600">Toggle package availability for customers</p>
-            </div>
-            <Switch
-              id="is_available"
-              checked={formData.is_available}
-              onCheckedChange={(checked) => handleInputChange("is_available", checked)}
+              checked={formData.trending}
+              onCheckedChange={(checked) => handleInputChange("trending", checked)}
             />
           </div>
         </CardContent>
@@ -548,7 +391,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         </Button>
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-          {mode === "create" ? "Create Package" : "Update Package"}
+          {mode === "create" ? "Create Event" : "Update Event"}
         </Button>
       </div>
     </form>

@@ -1,11 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Star, Heart, IndianRupeeIcon, Link, Eye } from "lucide-react"
+import { Star, IndianRupeeIcon, Link, Eye } from "lucide-react"
+import { WishlistButton } from "@/components/wishlist-button"
+import { createClient } from "@/lib/supabase/client"
+import { isEventInWishlist } from "@/lib/supabase/wishlists"
 
 interface Categories {
   id: string
@@ -31,6 +34,24 @@ interface EventCardProps {
 
 export function EventCard({ event: event}: EventCardProps) {
   const [isFavorited, setIsFavorited] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [inWishlist, setInWishlist] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+
+      if (user) {
+        const wishlistStatus = await isEventInWishlist(event.id)
+        setInWishlist(wishlistStatus)
+      }
+    }
+    getUser()
+  }, [event.id, supabase.auth])
 
   return (
     <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 animate-scale-in">
@@ -62,15 +83,15 @@ export function EventCard({ event: event}: EventCardProps) {
           )}
         </div>
 
-        {/* Favorite Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-3 right-3 bg-white/90 hover:bg-white"
-          onClick={() => setIsFavorited(!isFavorited)}
-        >
-          <Heart className={`w-4 h-4 ${isFavorited ? "fill-red-500 text-red-500" : "text-gray-600"}`} />
-        </Button>
+        {/* Wishlist Button */}
+        <div className="absolute top-3 right-3">
+          <WishlistButton
+            eventId={event.id}
+            isInWishlist={inWishlist}
+            isAuthenticated={!!user}
+            onWishlistChange={(newStatus) => setInWishlist(newStatus)}
+          />
+        </div>
       </div>
 
       <CardContent className="p-4">

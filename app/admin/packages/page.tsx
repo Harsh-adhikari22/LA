@@ -15,14 +15,14 @@ import { toast } from "@/hooks/use-toast"
 interface PartyPackage {
   id: string
   title: string
-  location: string
-  price: number
-  duration_hours: number
+  description: string
+  discounted_price: number
+  actual_price: number
+  rating: number
+  reviews_count: number
+  trending: boolean
   category: string
-  is_available: boolean
-  is_trending: boolean
-  available_spots: number
-  max_capacity: number
+  image_url: string
   created_at: string
 }
 
@@ -39,17 +39,17 @@ export default function AdminPackagesPage() {
   const fetchPackages = async () => {
     try {
       const { data, error } = await supabase
-        .from("party_packages")
+        .from("events")
         .select("*")
         .order("created_at", { ascending: false })
 
       if (error) throw error
       setPackages(data || [])
     } catch (error) {
-      console.error("Error fetching packages:", error)
+      console.error("Error fetching events:", error)
       toast({
         title: "Error",
-        description: "Failed to load packages",
+        description: "Failed to load events",
         variant: "destructive",
       })
     } finally {
@@ -58,23 +58,23 @@ export default function AdminPackagesPage() {
   }
 
   const handleDelete = async (packageId: string) => {
-    if (!confirm("Are you sure you want to delete this package?")) return
+    if (!confirm("Are you sure you want to delete this event?")) return
 
     try {
-      const { error } = await supabase.from("party_packages").delete().eq("id", packageId)
+      const { error } = await supabase.from("events").delete().eq("id", packageId)
 
       if (error) throw error
 
       setPackages(packages.filter((p) => p.id !== packageId))
       toast({
         title: "Success",
-        description: "Package deleted successfully",
+        description: "Event deleted successfully",
       })
     } catch (error) {
-      console.error("Error deleting package:", error)
+      console.error("Error deleting event:", error)
       toast({
         title: "Error",
-        description: "Failed to delete package",
+        description: "Failed to delete event",
         variant: "destructive",
       })
     }
@@ -83,7 +83,7 @@ export default function AdminPackagesPage() {
   const filteredPackages = packages.filter(
     (pkg) =>
       pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      pkg.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pkg.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       pkg.category?.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
@@ -95,13 +95,13 @@ export default function AdminPackagesPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Party Packages</h1>
-          <p className="text-gray-600">Manage your party planning packages</p>
+          <h1 className="text-3xl font-bold text-gray-900">Events</h1>
+          <p className="text-gray-600">Manage your party events</p>
         </div>
         <Button asChild>
           <Link href="/admin/packages/new">
             <Plus className="w-4 h-4 mr-2" />
-            Add Package
+            Add Event
           </Link>
         </Button>
       </div>
@@ -112,7 +112,7 @@ export default function AdminPackagesPage() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search packages..."
+                placeholder="Search events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -124,11 +124,10 @@ export default function AdminPackagesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Package</TableHead>
-                <TableHead>Location</TableHead>
+                <TableHead>Event</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead>Capacity</TableHead>
+                <TableHead>Rating</TableHead>
+                <TableHead>Reviews</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -145,19 +144,16 @@ export default function AdminPackagesPage() {
                             {pkg.category}
                           </Badge>
                         )}
-                        {pkg.is_trending && <Badge className="text-xs bg-red-500">Trending</Badge>}
+                        {pkg.trending && <Badge className="text-xs bg-red-500">Trending</Badge>}
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{pkg.location}</TableCell>
-                  <TableCell>₹{pkg.price}</TableCell>
-                  <TableCell>{pkg.duration_hours} hours</TableCell>
+                  <TableCell>₹{Number(pkg.discounted_price).toLocaleString()}</TableCell>
+                  <TableCell>{pkg.rating?.toFixed(1) || "—"}</TableCell>
+                  <TableCell>{pkg.reviews_count || 0}</TableCell>
                   <TableCell>
-                    {pkg.available_spots}/{pkg.max_capacity}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={pkg.is_available ? "default" : "secondary"}>
-                      {pkg.is_available ? "Available" : "Unavailable"}
+                    <Badge variant="default">
+                      Active
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -169,7 +165,7 @@ export default function AdminPackagesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
-                          <Link href={`/packages/${pkg.id}`}>
+                          <Link href={`/events/${pkg.id}`}>
                             <Eye className="w-4 h-4 mr-2" />
                             View
                           </Link>

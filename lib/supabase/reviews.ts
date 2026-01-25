@@ -42,11 +42,11 @@ export async function submitReview(data: SubmitReviewData): Promise<{ success: b
     ])
 
     if (error) {
-      console.error("Error submitting review:", error)
-      // Handle unique constraint violation
+      // Handle unique constraint violation (duplicate review)
       if (error.code === "23505") {
         return { success: false, error: "You have already reviewed this event" }
       }
+      console.error("Error submitting review:", error)
       return { success: false, error: error.message }
     }
 

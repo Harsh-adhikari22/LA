@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/server"
 import { StarDistributionChart } from "@/components/star-distribution-chart"
 import { ReviewsSection } from "@/components/reviews-section"
 import { ReviewForm } from "@/components/review-form"
+import EventCarousel from "@/components/EventCarousel"
 
 interface EventDetailPageProps {
   params: Promise<{ id: string }>
@@ -33,6 +34,9 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0
 
+  const images = [pkg.image_url, ...(pkg.additional_images || [])].filter(Boolean)
+
+
   if (!pkg) {
     notFound()
   }
@@ -46,20 +50,16 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Image */}
-            <div className="relative overflow-hidden rounded-lg animate-fade-in-up">
-              <Image
-                src={
-                  pkg.image_url ||
-                  `/placeholder.svg?height=400&width=800&query=${encodeURIComponent(pkg.title + " party event") || "/placeholder.svg"}`
-                }
-                alt={pkg.title}
-                width={800}
-                height={400}
-                className="w-full h-64 md:h-96 object-cover"
+            <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden animate-fade-in-up">
+              <EventCarousel
+                title={pkg.title}
+                hero={pkg.image_url}
+                images={pkg.additional_images}
+                isTrending={pkg.is_trending}
               />
-
+            
               {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
+              <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
                 {pkg.is_trending && (
                   <Badge className="bg-red-500 text-white hover:bg-red-600">
                     <Trending className="w-3 h-3 mr-1" />
@@ -68,6 +68,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 )}
               </div>
             </div>
+
 
             {/* Event Info */}
             <div className="bg-white rounded-lg p-6 shadow-sm animate-fade-in-up animate-delay-100">

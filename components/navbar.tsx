@@ -7,7 +7,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Menu, X, User, LogOut, LogIn, MapIcon, Package } from "lucide-react"
+import { Search, Menu, X, User, LogOut, LogIn, MapIcon, Package, Heart } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { usePathname, useRouter } from "next/navigation"
 import {
@@ -209,6 +209,12 @@ export function Navbar() {
                         My Orders
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/wishlist" className="flex items-center gap-2 cursor-pointer">
+                        <Heart className="size-4" />
+                        My Wishlist
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
                       <LogOut className="size-4 mr-2" />
@@ -281,6 +287,10 @@ export function Navbar() {
                   <Link href="/orders" className="text-gray-700 hover:text-primary py-2 flex items-center gap-2">
                     <Package className="size-4" />
                     My Orders
+                  </Link>
+                  <Link href="/wishlist" className="text-gray-700 hover:text-primary py-2 flex items-center gap-2">
+                    <Heart className="size-4" />
+                    My Wishlist
                   </Link>
                   <Button variant="ghost" size="sm" onClick={handleSignOut} className="justify-start">
                     Sign Out
