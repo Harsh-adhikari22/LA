@@ -66,21 +66,23 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <h1 className="text-[54px] font-bold text-[#d4af37] lit-affairs-font drop-shadow-[0_0_22px_rgba(212,175,55,0.9)]">
+          Admin Dashboard
+        </h1>
         <p className="text-gray-600">Welcome to LitAffairs admin panel</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {stats.map((stat) => (
-          <Card key={stat.title} className="py-6">
+          <Card key={stat.title} className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)]">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">{stat.title}</CardTitle>
-              <stat.icon className={`w-4 h-4 ${stat.color}`} />
+              <CardTitle className="text-sm font-medium text-[#f2d47a]">{stat.title}</CardTitle>
+              <stat.icon className="w-4 h-4 text-[#d4af37]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-              <p className="text-xs text-gray-600 mt-1">{stat.description}</p>
+              <div className="text-2xl font-bold text-[#d4af37]">{stat.value}</div>
+              <p className="text-xs text-[#e6c768] mt-1">{stat.description}</p>
             </CardContent>
           </Card>
         ))}
@@ -88,24 +90,24 @@ export default async function AdminDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="py-6">
+        <Card className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)]">
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="text-[#f2d47a]">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <a
                 href="/admin/packages/new"
-                className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-center"
+                className="group p-4 border border-[#b88a22]/40 rounded-lg bg-black/60 text-[#f2d47a] hover:bg-[#d4af37] hover:text-black transition-all duration-300 text-center"
               >
-                <Sparkles className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <Sparkles className="w-8 h-8 mx-auto mb-2 text-[#d4af37] group-hover:text-black transition-colors duration-300" />
                 <p className="text-sm font-medium">Add Event</p>
               </a>
               <a
                 href="/admin/bookings"
-                className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-center"
+                className="group p-4 border border-[#b88a22]/40 rounded-lg bg-black/60 text-[#f2d47a] hover:bg-[#d4af37] hover:text-black transition-all duration-300 text-center"
               >
-                <ShoppingCart className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <ShoppingCart className="w-8 h-8 mx-auto mb-2 text-[#d4af37] group-hover:text-black transition-colors duration-300" />
                 <p className="text-sm font-medium">View Orders</p>
               </a>
             </div>

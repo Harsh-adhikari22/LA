@@ -20,11 +20,11 @@ export default async function AdminUsersPage() {
       )
     `)
 
-  if (error) return <div>{error.message}</div>
+  if (error) return <div className="text-red-300">{error.message}</div>
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Users</h1>
+      <h1 className="text-4xl font-bold text-[#d4af37] lit-affairs-font drop-shadow-[0_0_18px_rgba(212,175,55,0.8)]">Users</h1>
       <UsersTable users={users ?? []} />
     </div>
   )

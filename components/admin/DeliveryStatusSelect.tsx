@@ -11,10 +11,10 @@ const STATUSES = [
 ]
 
 const STATUS_STYLES: Record<string, string> = {
-  order_received: "bg-yellow-100 text-yellow-700",
-  processing: "bg-blue-100 text-blue-700",
-  out_for_delivery: "bg-purple-100 text-purple-700",
-  delivered: "bg-green-100 text-green-700",
+  order_received: "bg-black/80 text-[#f2d47a] border-[#b88a22]/40",
+  processing: "bg-black/80 text-[#f2d47a] border-[#b88a22]/40",
+  out_for_delivery: "bg-black/80 text-[#f2d47a] border-[#b88a22]/40",
+  delivered: "bg-black/80 text-[#f2d47a] border-[#b88a22]/40",
 }
 
 export default function DeliveryStatusSelect({
@@ -64,8 +64,8 @@ export default function DeliveryStatusSelect({
       disabled={loading}
       value={value}
       onChange={(e) => updateStatus(e.target.value)}
-      className={`border rounded px-2 py-1 text-xs capitalize transition ${
-        STATUS_STYLES[value] || "bg-gray-100 text-gray-700"
+      className={`border rounded px-2 py-1 text-xs capitalize transition bg-black/80 text-[#f2d47a] border-[#b88a22]/40 ${
+        STATUS_STYLES[value] || ""
       }`}
     >
       {STATUSES.map((s) => (

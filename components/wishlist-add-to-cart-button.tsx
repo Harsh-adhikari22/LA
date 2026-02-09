@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ShoppingCart, Loader2, CheckCircle } from "lucide-react"
 import { addToCartAction } from "@/lib/supabase/cart-actions"
 import { useToast } from "@/hooks/use-toast"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface WishlistAddToCartButtonProps {
   eventId: string
@@ -15,6 +16,9 @@ export function WishlistAddToCartButton({ eventId, price }: WishlistAddToCartBut
   const [loading, setLoading] = useState(false)
   const [isAdded, setIsAdded] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const handleAddToCart = async () => {
     setLoading(true)
@@ -30,6 +34,17 @@ export function WishlistAddToCartButton({ eventId, price }: WishlistAddToCartBut
         // Reset button after 2 seconds
         setTimeout(() => setIsAdded(false), 2000)
       } else {
+        if (result.authRequired) {
+          toast({
+            title: "Sign in required",
+            description: "Please sign in to add items to your cart",
+            variant: "destructive",
+          })
+          const qs = searchParams?.toString()
+          const redirectTo = `${pathname}${qs ? `?${qs}` : ""}`
+          router.push(`/auth/login?redirect=${encodeURIComponent(redirectTo)}`)
+          return
+        }
         toast({
           title: "Info",
           description: result.error || "Failed to add item to cart",
@@ -52,9 +67,11 @@ export function WishlistAddToCartButton({ eventId, price }: WishlistAddToCartBut
     <Button
       onClick={handleAddToCart}
       disabled={loading || isAdded}
-      className={`w-full transition-all ${
-        isAdded ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"
-      } text-white`}
+      className={`w-full transition-all duration-300 ${
+        isAdded
+          ? "bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)]"
+          : "bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-[#d4af37] hover:text-black"
+      }`}
     >
       {loading ? (
         <>

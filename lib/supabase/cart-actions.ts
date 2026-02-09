@@ -2,7 +2,10 @@
 
 import { createClient } from "./server"
 
-export async function addToCartAction(eventId: string, price: number): Promise<{ success: boolean; error?: string; isNew?: boolean }> {
+export async function addToCartAction(
+  eventId: string,
+  price: number
+): Promise<{ success: boolean; error?: string; isNew?: boolean; authRequired?: boolean }> {
   try {
     const supabase = await createClient()
     const {
@@ -10,7 +13,7 @@ export async function addToCartAction(eventId: string, price: number): Promise<{
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return { success: false, error: "You must be logged in to add to cart" }
+      return { success: false, error: "You must be logged in to add to cart", authRequired: true }
     }
 
     // First, check if user has a cart, if not create one

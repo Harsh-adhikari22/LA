@@ -69,39 +69,47 @@ export default function YourOrdersPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col relative">
       <Navbar />
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[url('/contact_bg.jpg')] bg-cover bg-center bg-no-repeat" />
+        <div className="absolute inset-0 bg-black/70" />
+      </div>
 
-      <main className="flex-1">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Page Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Your Orders</h1>
-            <p className="text-gray-600 mt-2">Track and manage all your orders in one place</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-[#d4af37] lit-affairs-font drop-shadow-[0_0_18px_rgba(212,175,55,0.8)]">
+              Your Orders
+            </h1>
+            <p className="text-[#f2d47a] mt-2 lit-affairs-font text-[clamp(1.2rem,2.6vw,1.8rem)] drop-shadow-[0_0_12px_rgba(212,175,55,0.6)]">
+              Track and manage all your orders in one place
+            </p>
           </div>
 
           {/* Loading State */}
           {loading && (
             <div className="flex flex-col items-center justify-center py-16">
-              <Loader className="w-8 h-8 text-indigo-600 animate-spin" />
-              <p className="mt-4 text-gray-600">Loading your orders...</p>
+              <Loader className="w-8 h-8 text-[#d4af37] animate-spin" />
+              <p className="mt-4 text-[#f2d47a] lit-affairs-font">Loading your orders...</p>
             </div>
           )}
 
           {/* Error State */}
           {error && !loading && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-              <p className="text-red-700 font-medium">{error}</p>
-              <p className="text-red-600 text-sm mt-1">Please try refreshing the page</p>
+            <div className="bg-black/70 border border-red-700/50 rounded-lg p-6 text-center">
+              <p className="text-red-300 font-medium">{error}</p>
+              <p className="text-red-200 text-sm mt-1">Please try refreshing the page</p>
             </div>
           )}
 
           {/* Empty State */}
           {!loading && !error && orders.length === 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <div className="bg-white/5 rounded-2xl border border-[#b88a22]/40 backdrop-blur-xl p-12 text-center shadow-[0_0_30px_rgba(212,175,55,0.25)]">
               <div className="mb-4">
                 <svg
-                  className="mx-auto w-16 h-16 text-gray-400"
+                  className="mx-auto w-16 h-16 text-[#d4af37]/60"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -114,11 +122,11 @@ export default function YourOrdersPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">No orders yet</h2>
-              <p className="text-gray-600 mb-6">You haven't placed any orders yet. Start shopping now!</p>
+              <h2 className="text-2xl font-semibold text-[#f2d47a] mb-2 lit-affairs-font">No orders yet</h2>
+              <p className="text-[#e6c768] mb-6 lit-affairs-font">You haven't placed any orders yet. Start shopping now!</p>
               <Button
                 onClick={() => router.push("/packages")}
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-[#d4af37] hover:text-black transition-all duration-300"
               >
                 Browse Packages
               </Button>

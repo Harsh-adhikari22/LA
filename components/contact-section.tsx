@@ -115,11 +115,13 @@ export function ContactSection() {
   };
 
   return (
-    <section className="py-16 bg-black/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rajdhani">
+    <section className="py-16 bg-black/40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-blue-300 fancy-adventure">Get in Touch</h2>
-          <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-semibold">
+          <h2 className="text-[clamp(3rem,6vw,4.5rem)] font-bold text-[#d4af37] lit-affairs-font drop-shadow-[0_0_26px_rgba(212,175,55,0.9)]">
+            Get in Touch
+          </h2>
+          <p className="text-[clamp(1.3rem,2.8vw,2rem)] text-[#f2d47a] max-w-3xl mx-auto lit-affairs-font drop-shadow-[0_0_18px_rgba(212,175,55,0.7)]">
             Have questions about our party packages? We're here to help you plan your perfect celebration.
           </p>
         </div>
@@ -128,59 +130,59 @@ export function ContactSection() {
           {/* Contact Information */}
           <div className="space-y-8 animate-slide-up">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-white">Contact Information</h3>
+              <h3 className="text-3xl font-bold text-[#f2d47a] mb-6 lit-affairs-font">Contact Information</h3>
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 bg-black/60 border border-[#b88a22]/50 rounded-lg flex items-center justify-center shadow-[0_0_12px_rgba(212,175,55,0.35)]">
+                    <Phone className="w-6 h-6 text-[#d4af37]" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-100 font-semibold">Phone</p>
-                    <p className="text-gray-300">{adminPhoneNumber}</p>
+                    <p className="font-medium text-[#f2d47a]">Phone</p>
+                    <p className="text-[#e6c768]">{adminPhoneNumber}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 bg-black/60 border border-[#b88a22]/50 rounded-lg flex items-center justify-center shadow-[0_0_12px_rgba(212,175,55,0.35)]">
+                    <Mail className="w-6 h-6 text-[#d4af37]" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-100 font-semibold">Email</p>
-                    <p className="text-gray-300">{adminEmail}</p>
+                    <p className="font-medium text-[#f2d47a]">Email</p>
+                    <p className="text-[#e6c768]">{adminEmail}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 bg-black/60 border border-[#b88a22]/50 rounded-lg flex items-center justify-center shadow-[0_0_12px_rgba(212,175,55,0.35)]">
+                    <Clock className="w-6 h-6 text-[#d4af37]" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-100 font-semibold">Business Hours</p>
-                    <p className="text-gray-300">Mon - Fri: 9:00 AM - 6:00 PM</p>
-                    <p className="text-gray-300">Sat - Sun: 10:00 AM - 4:00 PM</p>
+                    <p className="font-medium text-[#f2d47a]">Business Hours</p>
+                    <p className="text-[#e6c768]">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                    <p className="text-[#e6c768]">Sat - Sun: 10:00 AM - 4:00 PM</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* WhatsApp Quick Contact */}
-            <Card className="bg-green-200 border-green-200 py-6">
+            <Card className="bg-white/5 border-[#b88a22]/40 backdrop-blur-xl py-6 shadow-[0_0_30px_rgba(212,175,55,0.25)]">
               <CardHeader>
-                <CardTitle className="flex items-center text-green-800">
-                  <MessageCircle className="w-5 h-5 mr-2" />
+                <CardTitle className="flex items-center text-[#f2d47a] lit-affairs-font">
+                  <MessageCircle className="w-5 h-5 mr-2 text-[#d4af37]" />
                   Quick WhatsApp Contact
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-green-700 mb-4 font-semibold">
+                <p className="text-[#e6c768] mb-4 lit-affairs-font">
                   Get instant responses to your party planning queries through WhatsApp. We're online and ready to help!
                 </p>
                 <Button
                   onClick={handleWhatsAppContact}
-                  className="w-full bg-green-500 hover:bg-green-600 text-black"
+                  className="w-full bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-[#d4af37] hover:text-black transition-all duration-300"
                   disabled={!formData.name || !formData.message}
                 >
-                  <MessageCircle className="w-4 h-4 mr-2 text-black" />
+                  <MessageCircle className="w-4 h-4 mr-2" />
                   Send via WhatsApp
                 </Button>
               </CardContent>
@@ -188,15 +190,15 @@ export function ContactSection() {
           </div>
 
           {/* Contact Form */}
-          <Card className="animate-slide-up py-8 backdrop-blur-sm bg-white/30 text-white border-0">
+          <Card className="animate-slide-up py-8 backdrop-blur-xl bg-white/5 text-white border border-[#b88a22]/40 shadow-[0_0_30px_rgba(212,175,55,0.25)]">
             <CardHeader>
-              <CardTitle className="text-2xl md:text-3xl font-bold text-white">Send us a Message</CardTitle>
+              <CardTitle className="text-3xl font-bold text-[#f2d47a] lit-affairs-font">Send us a Message</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6 font-semibold">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="name" className="py-2">Full Name *</Label>
+                    <Label htmlFor="name" className="py-2 text-[#f2d47a] lit-affairs-font">Full Name *</Label>
                     <Input
                       id="name"
                       type="text"
@@ -204,11 +206,11 @@ export function ContactSection() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="John Doe"
-                      className="border-0 bg-gray-900/80"
+                      className="border border-[#b88a22]/40 bg-black/60 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email" className="py-2">Email *</Label>
+                    <Label htmlFor="email" className="py-2 text-[#f2d47a] lit-affairs-font">Email *</Label>
                     <Input
                       id="email"
                       type="email"
@@ -216,25 +218,25 @@ export function ContactSection() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="john@example.com"
-                      className="border-0 bg-gray-900/80"
+                      className="border border-[#b88a22]/40 bg-black/60 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="phone" className="py-2">Phone Number</Label>
+                    <Label htmlFor="phone" className="py-2 text-[#f2d47a] lit-affairs-font">Phone Number</Label>
                     <Input
                       id="phone"
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+1 (234) 567-8900"
-                      className="border-0 bg-gray-900/80"
+                      className="border border-[#b88a22]/40 bg-black/60 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="subject" className="py-2">Subject *</Label>
+                    <Label htmlFor="subject" className="py-2 text-[#f2d47a] lit-affairs-font">Subject *</Label>
                     <Input
                       id="subject"
                       type="text"
@@ -242,13 +244,13 @@ export function ContactSection() {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="Party planning inquiry"
-                      className="border-0 bg-gray-900/80"
+                      className="border border-[#b88a22]/40 bg-black/60 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="message" className="py-2">Message *</Label>
+                  <Label htmlFor="message" className="py-2 text-[#f2d47a] lit-affairs-font">Message *</Label>
                   <Textarea
                     id="message"
                     required
@@ -256,12 +258,16 @@ export function ContactSection() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Tell us about your party plans or questions..."
-                    className="border-0 bg-gray-900/80"
+                    className="border border-[#b88a22]/40 bg-black/60 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
                   />
                 </div>
 
                 <div className="flex gap-4">
-                  <Button type="submit" onClick={handleEmail} className="flex-1 font-semibold">
+                  <Button
+                    type="submit"
+                    onClick={handleEmail}
+                    className="flex-1 bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-[#d4af37] hover:text-black transition-all duration-300"
+                  >
                     <Send className="size-4 mr-2" />
                     Send Email
                   </Button>
@@ -269,7 +275,7 @@ export function ContactSection() {
                     type="button"
                     variant="outline"
                     onClick={handleWhatsAppContact}
-                    className="flex-1 bg-transparent font-semibold"
+                    className="flex-1 bg-black/60 text-[#d4af37] border border-[#b88a22]/60 hover:bg-[#d4af37] hover:text-black transition-all duration-300"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp

@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { addToWishlist, removeFromWishlist } from "@/lib/supabase/wishlists"
 import { useToast } from "@/hooks/use-toast"
-import Link from "next/link"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface WishlistButtonProps {
   eventId: string
@@ -23,6 +23,13 @@ export function WishlistButton({
   const [inWishlist, setInWishlist] = useState(isInWishlist)
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    setInWishlist(isInWishlist)
+  }, [isInWishlist])
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -34,6 +41,9 @@ export function WishlistButton({
         description: "Please sign in to add items to your wishlist",
         variant: "destructive",
       })
+      const qs = searchParams?.toString()
+      const redirectTo = `${pathname}${qs ? `?${qs}` : ""}`
+      router.push(`/auth/login?redirect=${encodeURIComponent(redirectTo)}`)
       return
     }
 
@@ -90,12 +100,12 @@ export function WishlistButton({
       size="icon"
       onClick={handleClick}
       disabled={isLoading}
-      className="rounded-full"
+      className="group rounded-full border-[#b88a22]/60 bg-black/70 hover:bg-[#d4af37] transition-all duration-300"
       title={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
     >
       <Heart
         className={`w-5 h-5 transition-all ${
-          inWishlist ? "fill-red-500 text-red-500" : "text-gray-400"
+          inWishlist ? "fill-[#d4af37] text-[#d4af37] group-hover:text-black group-hover:fill-black" : "text-[#d4af37]/70 group-hover:text-black"
         }`}
       />
     </Button>

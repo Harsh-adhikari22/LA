@@ -3,7 +3,12 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { CheckCircle } from "lucide-react"
 
-export default function SignUpSuccessPage() {
+export default function SignUpSuccessPage({
+  searchParams,
+}: {
+  searchParams?: { redirect?: string }
+}) {
+  const redirectTo = searchParams?.redirect
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white p-6">
       <div className="w-full max-w-md">
@@ -31,10 +36,12 @@ export default function SignUpSuccessPage() {
             </p>
             <div className="space-y-2">
               <Button asChild className="w-full">
-                <Link href="/auth/login">Back to Sign In</Link>
+                <Link href={redirectTo ? `/auth/login?redirect=${encodeURIComponent(redirectTo)}` : "/auth/login"}>
+                  Back to Sign In
+                </Link>
               </Button>
               <Button variant="ghost" asChild className="w-full">
-                <Link href="/">Return to Homepage</Link>
+                <Link href={redirectTo || "/"}>Return to Homepage</Link>
               </Button>
             </div>
           </CardContent>

@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Star, IndianRupeeIcon, Link, Eye } from "lucide-react"
+import { Star, IndianRupeeIcon } from "lucide-react"
 import { WishlistButton } from "@/components/wishlist-button"
 import { createClient } from "@/lib/supabase/client"
 import { isEventInWishlist } from "@/lib/supabase/wishlists"
@@ -33,10 +33,10 @@ interface EventCardProps {
 }
 
 export function EventCard({ event: event}: EventCardProps) {
-  const [isFavorited, setIsFavorited] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [inWishlist, setInWishlist] = useState(false)
   const supabase = createClient()
+  const router = useRouter()
 
   useEffect(() => {
     const getUser = async () => {
@@ -53,9 +53,38 @@ export function EventCard({ event: event}: EventCardProps) {
     getUser()
   }, [event.id, supabase.auth])
 
+  const goToDetails = () => {
+    router.push(`/events/${event.id}`)
+  }
+
   return (
-    <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 animate-scale-in">
-      <div className="relative">
+    <Card
+      className="group relative overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-scale-in cursor-pointer bg-transparent"
+      onClick={goToDetails}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          goToDetails()
+        }
+      }}
+    >
+      {/* Full-card blurred image-based background with dark offset */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="w-full h-full scale-110"
+          style={{
+            backgroundImage: `url(${event.image_url})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(18px)",
+          }}
+        />
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
+
+      <div className="relative z-10">
         <div className="aspect-[4/3] overflow-hidden">
           <Image
             src={
@@ -84,7 +113,12 @@ export function EventCard({ event: event}: EventCardProps) {
         </div>
 
         {/* Wishlist Button */}
-        <div className="absolute top-3 right-3">
+        <div
+          className="absolute top-3 right-3"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+        >
           <WishlistButton
             eventId={event.id}
             isInWishlist={inWishlist}
@@ -94,33 +128,46 @@ export function EventCard({ event: event}: EventCardProps) {
         </div>
       </div>
 
-      <CardContent className="p-4">
-        <div className="space-y-3">
+      <CardContent className="relative z-10 p-4 text-white">
+        <div className="relative space-y-3">
           <div>
-            <h3 className="font-semibold text-lg text-gray-900 line-clamp-2 group-hover:text-primary transition-colors">
+            <h3 className="font-bold text-xl text-white line-clamp-2 group-hover:text-primary transition-colors">
               {event.title}
             </h3>
           </div>
-          <div className="flex items-center text-sm text-gray-600">
-            <IndianRupeeIcon className="w-4 h-4 mr-1 text-primary" />
-            <span className="ml-2 line-through text-gray-500">{event.actual_price}</span>
-            <span>{event.discounted_price}</span>
+
+          {/* Prices */}
+          <div className="flex items-baseline justify-between gap-2">
+            <div className="flex items-baseline gap-2">
+              {/* Discounted price (highlighted) */}
+              <span className="inline-flex items-center gap-1 text-base md:text-lg font-bold text-black bg-[#FFD700] px-2.5 py-1 rounded-md shadow-[0_0_16px_rgba(255,215,0,0.85)]">
+                <IndianRupeeIcon className="w-4 h-4 text-black" />
+                {event.discounted_price}
+              </span>
+
+              {/* Actual price (strikethrough, smaller than discounted) */}
+              <span className="text-base font-semibold text-white/70 line-through">
+                ₹{event.actual_price}
+              </span>
+            </div>
+            {event.actual_price > event.discounted_price && (
+              <span className="text-sm font-semibold text-emerald-50 bg-emerald-500/90 px-3 py-1 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.9)]">
+                Save ₹{event.actual_price - event.discounted_price}
+              </span>
+            )}
           </div>
+
           {event.reviews_count > 0 ? (
-          <div>
-            <Star className="w-4 h-4 mr-1 text-yellow-500 inline-block" />
-            <span className="text-sm text-gray-600">{event.rating} ({event.reviews_count} reviews)</span>
-          </div>):
-          (<div className="text-sm text-gray-500">
-            No reviews yet
-          </div>)}    
+            <div>
+              <Star className="w-4 h-4 mr-1 text-yellow-500 inline-block" />
+              <span className="text-sm text-white/80">
+                {event.rating} ({event.reviews_count} reviews)
+              </span>
+            </div>
+          ) : (
+            <div className="text-sm text-white/70">No reviews yet</div>
+          )}
         </div>
-        <a href={`/events/${event.id}`} className="no-underline">
-          <Button variant="ghost" className="mt-4 px-0">
-            <Eye className="w-4 h-4 mr-2" />
-            View
-          </Button>
-        </a>
       </CardContent>
     </Card>
   )

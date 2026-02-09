@@ -26,10 +26,15 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-black relative">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.08),transparent_55%)]" />
       <AdminSidebar />
-      <div className="flex-1 lg:ml-64">
-        <main className="p-6 overflow-auto h-full">{children}</main>
+      <div className="flex-1 lg:ml-64 relative">
+        <main className="p-6 overflow-auto h-full">
+          <div className="rounded-2xl border border-[#b88a22]/30 bg-white/5 backdrop-blur-xl shadow-[0_0_30px_rgba(212,175,55,0.2)] p-6 transition-all duration-300">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   )

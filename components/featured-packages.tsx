@@ -7,8 +7,9 @@ import { CategoryGrid } from "./category-grid"
 export function FeaturedPackages() {
   return (
     <div>
-    <div className="w-full h-[3px] bg-gradient-to-r from-blue-400/40 via-white/80 to-blue-400/40 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.6)]"></div>
-    <section className="py-12 md:py-16 bg-[url('/Aurora2.jpeg')] bg-cover bg-fixed bg-center bg-no-repeat backdrop-blur-sm">
+    <div className="w-full h-[3px] bg-gradient-to-r from-[#6f5714] via-[#d4af37] to-[#6f5714] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.45)]"></div>
+    <section className="relative py-12 md:py-16 bg-[url('/Golden_embroidery.png')] bg-cover bg-fixed bg-center bg-no-repeat backdrop-blur-sm">
+      <div className="absolute inset-0 bg-black/80" />
       {/* <video
         autoPlay
         loop
@@ -19,10 +20,12 @@ export function FeaturedPackages() {
         <source src="/Aurora_borealis.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video> */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 fancy-adventure text-white-300">Featured Categories</h2>
-          <p className="text-lg md:text-xl text-gray-50 max-w-2xl mx-auto font-semibold rajdhani text-shadow-[0_0_20px_#ffffff]">
+          <h2 className="text-5xl md:text-6xl font-bold text-[#d4af37] mb-4 lit-affairs-font drop-shadow-[0_0_38px_rgba(212,175,55,0.95)]">
+            Featured Categories
+          </h2>
+          <p className="text-2xl md:text-3xl text-[#f2d47a] max-w-3xl mx-auto lit-affairs-font drop-shadow-[0_0_30px_rgba(212,175,55,0.8)]">
             Discover our most popular party categories and create unforgettable celebrations
           </p>
         </div>
@@ -31,7 +34,7 @@ export function FeaturedPackages() {
         </div>
       </div>
     </section>
-    <div className="w-full h-[3px] bg-gradient-to-r from-blue-400/40 via-white/80 to-pink-400/40 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.6)]"></div>
+    <div className="w-full h-[3px] bg-gradient-to-r from-[#6f5714] via-[#d4af37] to-[#6f5714] rounded-full shadow-[0_0_20px_rgba(212,175,55,0.45)]"></div>
     </div>
   )
 }

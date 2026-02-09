@@ -200,46 +200,48 @@ const handleSubmit = async (e: React.FormEvent) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Basic Information */}
-        <Card className="py-6">
+        <Card className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)] transition-all duration-300">
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
+            <CardTitle className="text-[#f2d47a]">Basic Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="title">Event Title *</Label>
+              <Label htmlFor="title" className="text-[#f2d47a]">Event Title *</Label>
               <Input
                 id="title"
                 value={formData.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="Elegant Birthday Party"
                 required
+                className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
               />
             </div>
 
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description" className="text-[#f2d47a]">Description</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => handleInputChange("description", e.target.value)}
                 placeholder="Describe your event..."
                 rows={4}
+                className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
               />
             </div>
 
             <div>
-              <Label htmlFor="category">Event Category</Label>
+              <Label htmlFor="category" className="text-[#f2d47a]">Event Category</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => handleInputChange("category", value)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a]">
                   <SelectValue placeholder="Select event category" />
                 </SelectTrigger>
 
-                <SelectContent>
+                <SelectContent className="bg-black/90 border-[#b88a22]/40 text-[#f2d47a]">
                   {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
+                    <SelectItem key={category.id} value={category.id} className="focus:bg-[#d4af37] focus:text-black">
                       {category.title}
                     </SelectItem>
                   ))}
@@ -250,13 +252,13 @@ const handleSubmit = async (e: React.FormEvent) => {
         </Card>
 
         {/* Pricing */}
-        <Card className="py-6">
+        <Card className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)] transition-all duration-300">
           <CardHeader>
-            <CardTitle>Pricing</CardTitle>
+            <CardTitle className="text-[#f2d47a]">Pricing</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-            <Label htmlFor="actual_price">Actual Price (₹)</Label>
+            <Label htmlFor="actual_price" className="text-[#f2d47a]">Actual Price (₹)</Label>
               <Input
                 id="actual_price"
                 type="number"
@@ -265,11 +267,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                   handleInputChange("actual_price", Number.parseFloat(e.target.value) || 0)
                 }
                 min="0"
+                className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
               />
             </div>
 
             <div>
-              <Label htmlFor="discounted_price">Discounted / Updated Price (₹)</Label>
+              <Label htmlFor="discounted_price" className="text-[#f2d47a]">Discounted / Updated Price (₹)</Label>
               <Input
                 id="discounted_price"
                 type="number"
@@ -278,19 +281,20 @@ const handleSubmit = async (e: React.FormEvent) => {
                   handleInputChange("discounted_price", Number.parseFloat(e.target.value) || 0)
                 }
                 min="0"
+                className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Images */}
-        <Card className="py-6">
+        <Card className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)] transition-all duration-300">
           <CardHeader>
-            <CardTitle>Images</CardTitle>
+            <CardTitle className="text-[#f2d47a]">Images</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="main_image">Main Image</Label>
+              <Label htmlFor="main_image" className="text-[#f2d47a]">Main Image</Label>
               <Input
                 id="main_image"
                 type="file"
@@ -301,23 +305,24 @@ const handleSubmit = async (e: React.FormEvent) => {
                     setMainImageFile(e.target.files?.[0] || null)
                   }
                 }
+                className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a]"
               />
 
               {isUploadingMain ? (
-                <div className="flex items-center gap-2 mt-2 text-gray-500">
+                <div className="flex items-center gap-2 mt-2 text-[#d4af37]/70">
                   <Loader2 className="w-5 h-5 animate-spin" /> Uploading main image...
                 </div>
               ) : formData.image_url ? (
                 <img
                   src={formData.image_url}
                   alt="Preview"
-                  className="mt-2 w-40 h-28 object-cover rounded-lg border"
+                  className="mt-2 w-40 h-28 object-cover rounded-lg border border-[#b88a22]/40"
                 />
               ) : null}
             </div>
 
             <div>
-              <Label htmlFor="gallery_Images">Gallery Images</Label>
+              <Label htmlFor="gallery_Images" className="text-[#f2d47a]">Gallery Images</Label>
               <Input
                 id="gallery_images"
                 type="file"
@@ -328,6 +333,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   console.log("Selected Files: ", files)
                   if (files) setGalleryFiles(Array.from(files))
                 }}
+                className="bg-black/60 border-[#b88a22]/40 text-[#f2d47a]"
               />
 
               <div className="flex flex-wrap gap-2 mt-2">
@@ -337,10 +343,10 @@ const handleSubmit = async (e: React.FormEvent) => {
                       <img
                         src={url}
                         alt={`Gallery ${index + 1}`}
-                        className="w-28 h-20 object-cover rounded-lg border"
+                        className="w-28 h-20 object-cover rounded-lg border border-[#b88a22]/40"
                       />
                       <X
-                        className="absolute top-1 right-1 w-4 h-4 cursor-pointer bg-white rounded-full"
+                        className="absolute top-1 right-1 w-4 h-4 cursor-pointer bg-black text-[#d4af37] rounded-full border border-[#b88a22]/40"
                         onClick={() => removeGalleryUrl(index)}
                       />
                     </div>
@@ -350,7 +356,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 {uploadingGallery.map((filename) => (
                   <div
                     key={filename}
-                    className="w-28 h-20 flex items-center justify-center border rounded-lg text-gray-500"
+                    className="w-28 h-20 flex items-center justify-center border border-[#b88a22]/40 rounded-lg text-[#d4af37]/70"
                   >
                     <Loader2 className="w-5 h-5 animate-spin mr-1" />
                     <span className="text-xs">Uploading...</span>
@@ -365,15 +371,15 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       
       {/* Settings */}
-      <Card className="py-6">
+      <Card className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)] transition-all duration-300">
         <CardHeader>
-          <CardTitle>Event Settings</CardTitle>
+          <CardTitle className="text-[#f2d47a]">Event Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="is_trending">Trending Event</Label>
-              <p className="text-sm text-gray-600">Mark this event as trending to feature it prominently</p>
+              <Label htmlFor="is_trending" className="text-[#f2d47a]">Trending Event</Label>
+              <p className="text-sm text-[#e6c768]">Mark this event as trending to feature it prominently</p>
             </div>
             <Switch
               id="is_trending"
@@ -386,10 +392,19 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       {/* Submit Buttons */}
       <div className="flex gap-4 justify-end">
-        <Button type="button" variant="outline" onClick={() => router.back()}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.back()}
+          className="border-[#b88a22]/60 text-[#d4af37] bg-black/60 hover:bg-[#d4af37] hover:text-black transition-all duration-300"
+        >
           Cancel
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-[#d4af37] hover:text-black transition-all duration-300"
+        >
           {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
           {mode === "create" ? "Create Event" : "Update Event"}
         </Button>
@@ -397,6 +412,5 @@ const handleSubmit = async (e: React.FormEvent) => {
     </form>
   )
 }
-
 
 

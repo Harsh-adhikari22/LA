@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Plus, Search, MoreHorizontal, Edit, Trash2, Eye } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "@/hooks/use-toast"
+import { exportToExcel } from "@/lib/export-to-excel"
 
 interface PartyPackage {
   id: string
@@ -88,34 +89,60 @@ export default function AdminPackagesPage() {
   )
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64">Loading...</div>
+    return <div className="flex items-center justify-center h-64 text-[#d4af37]">Loading...</div>
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Events</h1>
-          <p className="text-gray-600">Manage your party events</p>
+          <h1 className="text-4xl font-bold text-[#d4af37] lit-affairs-font drop-shadow-[0_0_18px_rgba(212,175,55,0.8)]">Events</h1>
+          <p className="text-[#f2d47a]">Manage your party events</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/packages/new">
-            <Plus className="w-4 h-4 mr-2" />
-            Add Event
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="border-[#b88a22]/60 text-[#d4af37] bg-black/60 hover:bg-[#d4af37] hover:text-black transition-all duration-300"
+            onClick={() =>
+              exportToExcel({
+                data: filteredPackages.map((pkg) => ({
+                  id: pkg.id,
+                  title: pkg.title,
+                  description: pkg.description,
+                  category: pkg.category,
+                  discounted_price: pkg.discounted_price,
+                  actual_price: pkg.actual_price,
+                  rating: pkg.rating,
+                  reviews_count: pkg.reviews_count,
+                  trending: pkg.trending ? "Yes" : "No",
+                  created_at: pkg.created_at ? new Date(pkg.created_at).toLocaleString() : "",
+                })),
+                fileName: "party-packages",
+                sheetName: "Party Packages",
+              })
+            }
+          >
+            Export to Excel
+          </Button>
+          <Button asChild className="bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-[#d4af37] hover:text-black transition-all duration-300">
+            <Link href="/admin/packages/new">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Event
+            </Link>
+          </Button>
+        </div>
       </div>
 
-      <Card className="py-6">
+      <Card className="py-6 bg-white/5 border border-[#b88a22]/40 backdrop-blur-xl shadow-[0_0_24px_rgba(212,175,55,0.2)] transition-all duration-300">
         <CardHeader>
           <div className="flex items-center space-x-4">
             <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#d4af37] w-4 h-4" />
               <Input
                 placeholder="Search events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-black/60 border-[#b88a22]/40 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus-visible:ring-[#d4af37]/40"
               />
             </div>
           </div>
@@ -123,61 +150,61 @@ export default function AdminPackagesPage() {
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Event</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Rating</TableHead>
-                <TableHead>Reviews</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
+              <TableRow className="border-[#b88a22]/30">
+                <TableHead className="text-[#f2d47a]">Event</TableHead>
+                <TableHead className="text-[#f2d47a]">Price</TableHead>
+                <TableHead className="text-[#f2d47a]">Rating</TableHead>
+                <TableHead className="text-[#f2d47a]">Reviews</TableHead>
+                <TableHead className="text-[#f2d47a]">Status</TableHead>
+                <TableHead className="text-[#f2d47a]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredPackages.map((pkg) => (
-                <TableRow key={pkg.id}>
+                <TableRow key={pkg.id} className="border-[#b88a22]/20">
                   <TableCell>
                     <div>
-                      <div className="font-medium">{pkg.title}</div>
+                      <div className="font-medium text-[#f2d47a]">{pkg.title}</div>
                       <div className="flex gap-1 mt-1">
                         {pkg.category && (
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs bg-black/60 text-[#d4af37] border border-[#b88a22]/40">
                             {pkg.category}
                           </Badge>
                         )}
-                        {pkg.trending && <Badge className="text-xs bg-red-500">Trending</Badge>}
+                        {pkg.trending && <Badge className="text-xs bg-[#d4af37] text-black">Trending</Badge>}
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>₹{Number(pkg.discounted_price).toLocaleString()}</TableCell>
-                  <TableCell>{pkg.rating?.toFixed(1) || "—"}</TableCell>
-                  <TableCell>{pkg.reviews_count || 0}</TableCell>
+                  <TableCell className="text-[#f2d47a]">₹{Number(pkg.discounted_price).toLocaleString()}</TableCell>
+                  <TableCell className="text-[#f2d47a]">{pkg.rating?.toFixed(1) || "—"}</TableCell>
+                  <TableCell className="text-[#f2d47a]">{pkg.reviews_count || 0}</TableCell>
                   <TableCell>
-                    <Badge variant="default">
+                    <Badge className="bg-[#d4af37]/20 text-[#f2d47a] border border-[#b88a22]/40">
                       Active
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" className="text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-300">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="bg-black/90 border border-[#b88a22]/50 text-[#f2d47a] shadow-[0_0_24px_rgba(212,175,55,0.35)]">
                         <DropdownMenuItem asChild>
-                          <Link href={`/events/${pkg.id}`}>
-                            <Eye className="w-4 h-4 mr-2" />
+                          <Link href={`/events/${pkg.id}`} className="flex items-center gap-2 text-[#f2d47a] hover:text-black">
+                            <Eye className="w-4 h-4 mr-2 text-[#d4af37]" />
                             View
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                          <Link href={`/admin/packages/${pkg.id}/edit`}>
-                            <Edit className="w-4 h-4 mr-2" />
+                          <Link href={`/admin/packages/${pkg.id}/edit`} className="flex items-center gap-2 text-[#f2d47a] hover:text-black">
+                            <Edit className="w-4 h-4 mr-2 text-[#d4af37]" />
                             Edit
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(pkg.id)} className="text-red-600">
-                          <Trash2 className="w-4 h-4 mr-2" />
+                        <DropdownMenuItem onClick={() => handleDelete(pkg.id)} className="text-[#f2d47a] hover:text-black">
+                          <Trash2 className="w-4 h-4 mr-2 text-[#d4af37]" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>

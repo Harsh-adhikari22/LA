@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ShoppingCart, Loader2 } from "lucide-react"
 import { addToCart } from "@/lib/supabase/cart"
 import { useToast } from "@/hooks/use-toast"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 interface AddToCartButtonProps {
   eventId: string
@@ -17,6 +17,8 @@ export function AddToCartButton({ eventId, price, userId }: AddToCartButtonProps
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const handleAddToCart = async () => {
     // Check if user is authenticated
@@ -26,7 +28,9 @@ export function AddToCartButton({ eventId, price, userId }: AddToCartButtonProps
         description: "Please sign in to add items to your cart",
         variant: "destructive",
       })
-      router.push("/auth/login")
+      const qs = searchParams?.toString()
+      const redirectTo = `${pathname}${qs ? `?${qs}` : ""}`
+      router.push(`/auth/login?redirect=${encodeURIComponent(redirectTo)}`)
       return
     }
 
