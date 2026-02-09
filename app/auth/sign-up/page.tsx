@@ -10,10 +10,10 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 
-export default function SignUpPage() {
+function SignUpPageInner() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [repeatPassword, setRepeatPassword] = useState("")
@@ -199,5 +199,13 @@ export default function SignUpPage() {
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <SignUpPageInner />
+    </Suspense>
   )
 }
