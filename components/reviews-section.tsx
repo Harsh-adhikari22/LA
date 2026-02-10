@@ -29,18 +29,18 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Comments</h2>
+    <div className="bg-black/60 border border-[#b88a22]/40 rounded-2xl p-6 shadow-[0_0_26px_rgba(212,175,55,0.2)] backdrop-blur-md rajdhani">
+      <h2 className="text-2xl font-bold text-[#f2d47a] lit-affairs-font mb-6">Customer Comments</h2>
 
       <div className="space-y-4">
         {reviews.map((review) => (
-          <Card key={review.id} className="border border-gray-200 p-4">
+          <Card key={review.id} className="border border-[#b88a22]/30 bg-black/40 p-4">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <div className="font-semibold text-gray-900">
+                <div className="font-semibold text-[#f2d47a]">
                   {review.profiles?.full_name || "Anonymous"}
                 </div>
-                <div className="text-sm text-gray-500">{formatDate(review.created_at)}</div>
+                <div className="text-sm text-[#c9a949]">{formatDate(review.created_at)}</div>
               </div>
 
               {/* Star Rating */}
@@ -49,7 +49,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
                   <Star
                     key={i}
                     className={`w-4 h-4 ${
-                      i < review.stars ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      i < review.stars ? "fill-[#d4af37] text-[#d4af37]" : "text-[#4b3a12]"
                     }`}
                   />
                 ))}
@@ -57,15 +57,15 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
             </div>
 
             {review.review && (
-              <p className="text-gray-700 text-sm leading-relaxed">{review.review}</p>
+              <p className="text-[#e6c768] text-sm leading-relaxed">{review.review}</p>
             )}
           </Card>
         ))}
       </div>
 
       {reviews.length > 0 && (
-        <div className="mt-6 pt-6 border-t text-center">
-          <button className="text-primary hover:underline font-medium text-sm">
+        <div className="mt-6 pt-6 border-t border-[#b88a22]/40 text-center">
+          <button className="text-[#d4af37] hover:underline font-medium text-sm">
             View all {reviews.length} reviews
           </button>
         </div>

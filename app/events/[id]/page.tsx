@@ -42,7 +42,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black rajdhani">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -50,7 +50,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Image */}
-            <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden animate-fade-in-up">
+            <div className="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden animate-fade-in-up border border-[#b88a22]/40 shadow-[0_0_35px_rgba(212,175,55,0.25)]">
               <EventCarousel
                 title={pkg.title}
                 hero={pkg.image_url}
@@ -71,27 +71,29 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
 
             {/* Event Info */}
-            <div className="bg-white rounded-lg p-6 shadow-sm animate-fade-in-up animate-delay-100">
+            <div className="bg-black/60 border border-[#b88a22]/40 rounded-2xl p-6 shadow-[0_0_30px_rgba(212,175,55,0.2)] backdrop-blur-md animate-fade-in-up animate-delay-100 rajdhani">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{pkg.title}</h1>
-                  <div className="flex items-center gap-4 text-gray-600">
-                    <div className="flex items-center text-yellow-500">
+                  <h1 className="text-4xl md:text-5xl font-bold text-[#f2d47a] lit-affairs-font mb-2">
+                    {pkg.title}
+                  </h1>
+                  <div className="flex items-center gap-4 text-[#c9a949]">
+                    <div className="flex items-center text-[#d4af37]">
                       <Star className="w-4 h-4 fill-current mr-1" />
-                      <span className="text-gray-600">
+                      <span className="text-[#c9a949]">
                         {Number(pkg.rating)?.toFixed(1) ?? "—"} ({pkg.reviews_count ?? 0} reviews)
                       </span>
                     </div>
                   </div>
                 </div>
                 {pkg.categories?.title && (
-                  <Badge variant="outline" className="text-sm">
+                  <Badge variant="outline" className="text-sm border-[#b88a22]/60 text-[#f2d47a]">
                     {pkg.categories.title}
                   </Badge>
                 )}
               </div>
 
-              <p className="text-gray-700 text-lg leading-relaxed">{pkg.description}</p>
+              <p className="text-[#e6c768] text-lg leading-relaxed">{pkg.description}</p>
             </div>
 
             {/* Star Distribution Chart */}
@@ -113,18 +115,18 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
           {/* Booking Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <Card className="animate-scale-in animate-delay-200 py-6">
+            <div className="sticky top-24 rajdhani">
+              <Card className="animate-scale-in animate-delay-200 py-6 bg-black/60 border border-[#b88a22]/40 shadow-[0_0_28px_rgba(212,175,55,0.2)] backdrop-blur-md">
                 <CardHeader>
                   <div className="text-center">
-                    <p className="text-sm text-gray-600">Starting from</p>
+                    <p className="text-sm text-[#c9a949]">Starting from</p>
                     <div className="flex items-center justify-center gap-2 mb-2 flex-wrap">
                       {pkg.actual_price != null && Number(pkg.actual_price) > Number(pkg.discounted_price) && (
-                        <span className="text-lg text-gray-500 line-through">
+                        <span className="text-lg text-[#c9a949] line-through">
                           ₹{Number(pkg.actual_price).toLocaleString()}
                         </span>
                       )}
-                      <span className="text-3xl font-bold text-primary">
+                      <span className="text-3xl font-bold text-[#d4af37] drop-shadow-[0_0_14px_rgba(212,175,55,0.6)]">
                         ₹{Number(pkg.discounted_price ?? 0).toLocaleString()}
                       </span>
                     </div>
@@ -132,17 +134,20 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  <Separator />
+                  <Separator className="bg-[#b88a22]/40" />
                   <div className="space-y-3">
                     <AddToCartButton eventId={id} price={Number(pkg.discounted_price ?? 0)} userId={user?.id} />
                     <a href="/contact">
-                      <Button variant="outline" className="w-full bg-transparent">
+                      <Button
+                        variant="outline"
+                        className="w-full bg-black text-[#d4af37] border border-[#b88a22]/60 hover:bg-[#d4af37] hover:text-black"
+                      >
                         <Phone className="w-4 h-4 mr-2" />
                         Contact Us
                       </Button>
                     </a>
                   </div>
-                  <Separator />
+                  <Separator className="bg-[#b88a22]/40" />
                 </CardContent>
               </Card>
             </div>

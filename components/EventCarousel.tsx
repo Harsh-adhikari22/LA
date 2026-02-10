@@ -2,18 +2,8 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import Autoplay from "embla-carousel-autoplay"
-
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp } from "lucide-react"
+import { TrendingUp, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface EventCarouselProps {
   title: string
@@ -30,65 +20,94 @@ export default function EventCarousel({
 }: EventCarouselProps) {
   const slides = [hero, ...(Array.isArray(images) ? images : [])].filter(Boolean)
 
-  const [api, setApi] = useState<any>()
   const [current, setCurrent] = useState(0)
+  const [unblurIndex, setUnblurIndex] = useState<number | null>(0)
+  const [isUnblurring, setIsUnblurring] = useState(false)
 
   useEffect(() => {
-    if (!api) return
+    if (slides.length <= 1) return
+    const id = window.setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length)
+    }, 3500)
+    return () => window.clearInterval(id)
+  }, [slides.length])
 
-    setCurrent(api.selectedScrollSnap())
+  useEffect(() => {
+    setUnblurIndex(current)
+    setIsUnblurring(true)
+    const t = window.setTimeout(() => setIsUnblurring(false), 350)
+    return () => window.clearTimeout(t)
+  }, [current])
 
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap())
-    })
-  }, [api])
+  const goTo = (index: number) => {
+    if (index < 0) {
+      setCurrent(slides.length - 1)
+      return
+    }
+    if (index >= slides.length) {
+      setCurrent(0)
+      return
+    }
+    setCurrent(index)
+  }
 
   return (
     <div className="relative overflow-hidden rounded-lg">
-      <Carousel
-        setApi={setApi}
-        opts={{
-          loop: true,
-        }}
-        plugins={[
-          Autoplay({
-            delay: 3500,
-            stopOnInteraction: false,
-          }),
-        ]}
-        className="w-full"
-      >
-        <CarouselContent>
-          {slides.map((img, idx) => (
-            <CarouselItem key={idx}>
-              <Image
-                src={
-                  img ||
-                  `/placeholder.svg?height=400&width=800&query=${encodeURIComponent(
-                    title + " party event"
-                  )}`
-                }
-                alt={`${title} image ${idx + 1}`}
-                width={800}
-                height={400}
-                className="w-full h-64 md:h-96 object-cover"
-              />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
+      <div className="relative w-full h-64 md:h-96">
+        {slides.map((img, idx) => {
+          const isActive = idx === current
+          const isUnblurTarget = isUnblurring && unblurIndex === idx
+          return (
+            <Image
+              key={idx}
+              src={
+                img ||
+                `/placeholder.svg?height=400&width=800&query=${encodeURIComponent(
+                  title + " party event"
+                )}`
+              }
+              alt={`${title} image ${idx + 1}`}
+              width={800}
+              height={400}
+              className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${
+                isActive ? "opacity-100" : "opacity-0"
+              } ${isActive && isUnblurTarget ? "blur-md" : isActive ? "blur-0" : "blur-md"}`}
+              priority={idx === 0}
+            />
+          )
+        })}
+      </div>
 
-        <CarouselPrevious className="left-2" />
-        <CarouselNext className="right-2" />
-      </Carousel>
+      {/* Arrows */}
+      {slides.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => goTo(current - 1)}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 size-9 rounded-full border border-[#b88a22]/60 bg-black text-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.4)] hover:bg-[#d4af37] hover:text-black transition-all"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="mx-auto h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(current + 1)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 size-9 rounded-full border border-[#b88a22]/60 bg-black text-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.4)] hover:bg-[#d4af37] hover:text-black transition-all"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="mx-auto h-4 w-4" />
+          </button>
+        </>
+      )}
 
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
             key={i}
-            onClick={() => api?.scrollTo(i)}
+            onClick={() => goTo(i)}
             className={`h-2 w-2 rounded-full transition-all ${
-              current === i ? "bg-white w-4" : "bg-white/50"
+              current === i ? "bg-[#d4af37] w-4 shadow-[0_0_10px_rgba(212,175,55,0.8)]" : "bg-[#f2d47a]/50"
             }`}
           />
         ))}

@@ -100,12 +100,16 @@ export function WishlistButton({
       size="icon"
       onClick={handleClick}
       disabled={isLoading}
-      className="group rounded-full border-[#b88a22]/60 bg-black/70 hover:bg-[#d4af37] transition-all duration-300"
+      className={`group/wishlist rounded-full border-[#b88a22]/60 bg-black/70 transition-all duration-300 ${
+        inWishlist ? "hover:bg-[#d4af37]" : "hover:bg-black/80"
+      }`}
       title={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
     >
       <Heart
         className={`w-5 h-5 transition-all ${
-          inWishlist ? "fill-[#d4af37] text-[#d4af37] group-hover:text-black group-hover:fill-black" : "text-[#d4af37]/70 group-hover:text-black"
+          inWishlist
+            ? "fill-[#d4af37] text-[#d4af37] group-hover/wishlist:text-black group-hover/wishlist:fill-black"
+            : "text-[#d4af37]/70 group-hover/wishlist:text-[#d4af37] group-hover/wishlist:fill-[#d4af37]"
         }`}
       />
     </Button>

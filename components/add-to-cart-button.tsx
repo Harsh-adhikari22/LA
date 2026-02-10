@@ -57,7 +57,7 @@ export function AddToCartButton({ eventId, price, userId }: AddToCartButtonProps
     <Button
       onClick={handleAddToCart}
       disabled={loading}
-      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+      className="w-full bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.4)] hover:bg-[#d4af37] hover:text-black"
     >
       {loading ? (
         <>

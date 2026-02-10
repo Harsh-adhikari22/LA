@@ -71,26 +71,28 @@ export function ReviewForm({ eventId, isAuthenticated, onReviewSubmitted }: Revi
 
   if (!isAuthenticated) {
     return (
-      <Card className="p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Share Your Review</h2>
-        <div className="text-center py-8">
-          <p className="text-gray-600 mb-4">Sign in to share your experience with this event</p>
-          <Link href="/auth/login">
-            <Button className="w-full sm:w-auto">Sign In to Review</Button>
-          </Link>
-        </div>
-      </Card>
-    )
-  }
+    <Card className="p-6 bg-black/60 border border-[#b88a22]/40 rounded-2xl shadow-[0_0_26px_rgba(212,175,55,0.2)] backdrop-blur-md rajdhani">
+      <h2 className="text-2xl font-bold text-[#f2d47a] lit-affairs-font mb-4">Share Your Review</h2>
+      <div className="text-center py-8">
+        <p className="text-[#c9a949] mb-4">Sign in to share your experience with this event</p>
+        <Link href="/auth/login">
+          <Button className="w-full sm:w-auto bg-black text-[#d4af37] border border-[#b88a22]/60 hover:bg-black/80">
+            Sign In to Review
+          </Button>
+        </Link>
+      </div>
+    </Card>
+  )
+}
 
   return (
-    <Card className="p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Share Your Review</h2>
+    <Card className="p-6 bg-black/60 border border-[#b88a22]/40 rounded-2xl shadow-[0_0_26px_rgba(212,175,55,0.2)] backdrop-blur-md rajdhani">
+      <h2 className="text-2xl font-bold text-[#f2d47a] lit-affairs-font mb-6">Share Your Review</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Star Rating */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">Your Rating</label>
+          <label className="block text-sm font-medium text-[#c9a949] mb-3">Your Rating</label>
           <div className="flex gap-3">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -104,15 +106,15 @@ export function ReviewForm({ eventId, isAuthenticated, onReviewSubmitted }: Revi
                 <Star
                   className={`w-8 h-8 ${
                     star <= (hoverRating || rating)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-300"
+                      ? "fill-[#d4af37] text-[#d4af37]"
+                      : "text-[#4b3a12]"
                   }`}
                 />
               </button>
             ))}
           </div>
           {rating > 0 && (
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-[#c9a949] mt-2">
               {rating === 1 && "Poor"}
               {rating === 2 && "Fair"}
               {rating === 3 && "Good"}
@@ -124,7 +126,7 @@ export function ReviewForm({ eventId, isAuthenticated, onReviewSubmitted }: Revi
 
         {/* Review Text */}
         <div>
-          <label htmlFor="review" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="review" className="block text-sm font-medium text-[#c9a949] mb-2">
             Your Review (Optional)
           </label>
           <Textarea
@@ -132,14 +134,18 @@ export function ReviewForm({ eventId, isAuthenticated, onReviewSubmitted }: Revi
             placeholder="Share your experience with this event..."
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            className="min-h-24"
+            className="min-h-24 bg-black/60 border-[#b88a22]/60 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus:ring-[#d4af37] focus:border-[#d4af37]"
             maxLength={500}
           />
-          <p className="text-xs text-gray-500 mt-2">{reviewText.length}/500 characters</p>
+          <p className="text-xs text-[#8f7326] mt-2">{reviewText.length}/500 characters</p>
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" disabled={isSubmitting || rating === 0} className="w-full">
+        <Button
+          type="submit"
+          disabled={isSubmitting || rating === 0}
+          className="w-full bg-black text-[#d4af37] border border-[#b88a22]/60 hover:bg-[#d4af37] hover:text-black"
+        >
           {isSubmitting ? "Submitting..." : "Submit Review"}
         </Button>
       </form>

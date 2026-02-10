@@ -399,3 +399,25 @@
   font-weight: 400;
   font-style: normal;
 }
+
+/* Gold styling for search page slider and switch */
+.golden-slider [data-slot="slider-track"] {
+  background-color: rgba(212, 175, 55, 0.2);
+  box-shadow: inset 0 0 12px rgba(212, 175, 55, 0.35);
+}
+
+.golden-slider [data-slot="slider-range"] {
+  background-color: #d4af37;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.55);
+}
+
+.golden-slider [data-slot="slider-thumb"] {
+  background-color: #f2d47a;
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+}
+
+.golden-switch [data-slot="switch-thumb"] {
+  background-color: #f2d47a;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+}

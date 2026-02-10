@@ -59,7 +59,7 @@ export function EventCard({ event: event}: EventCardProps) {
 
   return (
     <Card
-      className="group relative overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-scale-in cursor-pointer bg-transparent"
+      className="group relative overflow-hidden border-transparent bg-transparent hover:-translate-y-1 transition-all duration-300 animate-scale-in cursor-pointer hover:shadow-[0_0_45px_rgba(212,175,55,0.75)]"
       onClick={goToDetails}
       role="button"
       tabIndex={0}
@@ -85,7 +85,7 @@ export function EventCard({ event: event}: EventCardProps) {
       </div>
 
       <div className="relative z-10">
-        <div className="aspect-[4/3] overflow-hidden">
+        <div className="relative aspect-[4/3] overflow-hidden">
           <Image
             src={
               event.image_url
@@ -95,6 +95,7 @@ export function EventCard({ event: event}: EventCardProps) {
             height={300}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
         {/* Badges */}
@@ -131,7 +132,7 @@ export function EventCard({ event: event}: EventCardProps) {
       <CardContent className="relative z-10 p-4 text-white">
         <div className="relative space-y-3">
           <div>
-            <h3 className="font-bold text-xl text-white line-clamp-2 group-hover:text-primary transition-colors">
+            <h3 className="font-bold text-3xl text-white line-clamp-2 lit-affairs-font group-hover:text-[#d4af37] transition-colors">
               {event.title}
             </h3>
           </div>

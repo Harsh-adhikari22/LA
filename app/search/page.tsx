@@ -123,10 +123,13 @@ export default function SearchPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Search header */}
         <div className="space-y-3">
-          <h1 className="text-2xl md:text-3xl font-semibold text-white rajdhani">
-            Find the perfect <span className="text-primary">LitAffair</span>
+          <h1 className="text-3xl md:text-4xl font-semibold text-white lit-affairs-font">
+            Find the perfect{" "}
+            <span className="text-[#d4af37] drop-shadow-[0_0_16px_rgba(212,175,55,0.6)]">
+              LitAffair
+            </span>
           </h1>
-          <p className="text-sm md:text-base text-gray-300 hero-body">
+          <p className="text-sm md:text-base text-[#e6c768] hero-body">
             Search across packages, events and experiences. Refine with categories, price and trending filters.
           </p>
 
@@ -137,11 +140,11 @@ export default function SearchPage() {
               placeholder="Birthday parties, weddings, corporate events..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-12 text-base bg-black/40 border-white/10 text-white placeholder:text-gray-400"
+              className="h-12 text-base bg-black/60 border-[#b88a22]/50 text-[#f2d47a] placeholder:text-[#c9a949]/70 focus:ring-[#d4af37] focus:border-[#d4af37] hero-body"
             />
             <Button
               onClick={applyFilters}
-              className="h-12 px-6 bg-primary hover:bg-primary/90 text-sm md:text-base"
+              className="h-12 px-6 bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_18px_rgba(212,175,55,0.35)] hover:bg-black/80 text-sm md:text-base"
             >
               Search
             </Button>
@@ -149,37 +152,39 @@ export default function SearchPage() {
         </div>
 
         {/* Filters */}
-        <Card className="bg-black/40 border-white/10 text-white py-6">
+        <Card className="relative z-40 overflow-visible bg-black/60 border-[#b88a22]/40 text-white py-6 shadow-[0_0_30px_rgba(212,175,55,0.2)] backdrop-blur-md">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base md:text-lg rajdhani">Refine results</CardTitle>
+            <CardTitle className="text-base md:text-lg rajdhani text-[#f2d47a]">
+              Refine results
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Category multi-select dropdown */}
-              <div className="space-y-1" ref={categoryDropdownRef}>
-                <Label className="text-xs uppercase tracking-wide text-gray-400 rajdhani">
+              <div className="space-y-1 relative z-[60]" ref={categoryDropdownRef}>
+                <Label className="text-xs uppercase tracking-wide text-[#c9a949] rajdhani">
                   Categories
                 </Label>
                 <button
                   type="button"
                   onClick={() => setIsCategoryOpen((open) => !open)}
-                  className="w-full inline-flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-left hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/60"
+                  className="w-full inline-flex items-center justify-between gap-2 rounded-lg border border-[#b88a22]/50 bg-black/60 px-3 py-2 text-sm text-left hover:border-[#d4af37] focus:outline-none focus:ring-2 focus:ring-[#d4af37]/60"
                 >
-                  <span className="truncate text-gray-100 flex-1 min-w-0">
+                  <span className="truncate text-[#f2d47a] flex-1 min-w-0">
                     {selectedCategoryLabels || "All categories"}
                   </span>
-                  <span className="shrink-0 text-xs text-gray-400">
+                  <span className="shrink-0 text-xs text-[#c9a949]">
                     {filters.categories.length > 0 ? `${filters.categories.length} selected` : "Any"}
                   </span>
                   <ChevronDown
-                    className={`size-4 shrink-0 text-gray-400 transition-transform ${isCategoryOpen ? "rotate-180" : ""}`}
+                    className={`size-4 shrink-0 text-[#c9a949] transition-transform ${isCategoryOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isCategoryOpen && (
-                  <div className="absolute z-30 mt-2 w-full max-w-xs rounded-lg border border-white/10 bg-black/95 shadow-xl max-h-64 overflow-auto">
+                  <div className="absolute z-[70] mt-2 w-full max-w-xs rounded-lg border border-[#b88a22]/40 bg-black/95 shadow-[0_0_24px_rgba(212,175,55,0.25)] max-h-64 overflow-auto">
                     <div className="px-3 py-2 border-b border-white/5 flex items-center justify-between">
-                      <span className="text-xs font-medium text-gray-300 rajdhani">
+                      <span className="text-xs font-medium text-[#f2d47a] rajdhani">
                         Select categories
                       </span>
                       {filters.categories.length > 0 && (
@@ -191,7 +196,7 @@ export default function SearchPage() {
                               categories: [],
                             }))
                           }
-                          className="text-[11px] text-primary hover:underline"
+                          className="text-[11px] text-[#d4af37] hover:underline"
                         >
                           Clear
                         </button>
@@ -199,7 +204,7 @@ export default function SearchPage() {
                     </div>
                     <div className="py-2">
                       {categories.length === 0 && (
-                        <p className="px-3 py-2 text-xs text-gray-500">Loading categories...</p>
+                        <p className="px-3 py-2 text-xs text-[#c9a949]">Loading categories...</p>
                       )}
                       {categories.map((c) => {
                         const checked = filters.categories.includes(c.id)
@@ -208,12 +213,12 @@ export default function SearchPage() {
                             key={c.id}
                             type="button"
                             onClick={() => toggleCategory(c.id)}
-                            className="w-full px-3 py-2 flex items-center gap-2 text-sm text-gray-100 hover:bg-white/5"
+                            className="w-full px-3 py-2 flex items-center gap-2 text-sm text-[#f2d47a] hover:bg-white/5"
                           >
                             <Checkbox
                               checked={checked}
                               onCheckedChange={() => toggleCategory(c.id)}
-                              className="border-white/40 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                              className="border-[#d4af37]/60 data-[state=checked]:bg-[#d4af37] data-[state=checked]:border-[#d4af37]"
                             />
                             <span className="truncate">{c.title}</span>
                           </button>
@@ -226,7 +231,7 @@ export default function SearchPage() {
 
               {/* Price range slider */}
               <div className="space-y-2">
-                <Label className="text-xs uppercase tracking-wide text-gray-400 rajdhani">
+                <Label className="text-xs uppercase tracking-wide text-[#c9a949] rajdhani">
                   Price range (₹)
                 </Label>
                 <div className="px-1 pt-1">
@@ -236,10 +241,10 @@ export default function SearchPage() {
                     min={0}
                     max={10000}
                     step={100}
-                    className="w-full"
+                    className="w-full golden-slider"
                   />
                 </div>
-                <div className="flex justify-between text-xs text-gray-300">
+                <div className="flex justify-between text-xs text-[#f2d47a]">
                   <span>₹{priceRange[0]}</span>
                   <span>₹{priceRange[1]}</span>
                 </div>
@@ -247,17 +252,17 @@ export default function SearchPage() {
 
               {/* Sort by price */}
               <div className="space-y-2">
-                <Label className="text-xs uppercase tracking-wide text-gray-400 rajdhani">
+                <Label className="text-xs uppercase tracking-wide text-[#c9a949] rajdhani">
                   Sort by price
                 </Label>
                 <Select
                   value={sort}
                   onValueChange={(value) => setSort(value as "low" | "high" | "none")}
                 >
-                  <SelectTrigger className="bg-black/40 border-white/10 text-sm">
+                  <SelectTrigger className="bg-black/60 border-[#b88a22]/50 text-sm text-[#f2d47a]">
                     <SelectValue placeholder="No sorting" />
                   </SelectTrigger>
-                  <SelectContent className="bg-black/95 border-white/10 text-sm text-white">
+                  <SelectContent className="bg-black/95 border-[#b88a22]/40 text-sm text-[#f2d47a]">
                     <SelectItem value="none">No sorting</SelectItem>
                     <SelectItem value="low">Low → High</SelectItem>
                     <SelectItem value="high">High → Low</SelectItem>
@@ -267,15 +272,15 @@ export default function SearchPage() {
 
               {/* Trending */}
               <div className="space-y-2">
-                <Label className="text-xs uppercase tracking-wide text-gray-400 rajdhani">
+                <Label className="text-xs uppercase tracking-wide text-[#c9a949] rajdhani">
                   Trending
                 </Label>
-                <div className="flex items-center justify-between rounded-lg border border-white/20 bg-black/70 px-3 py-2">
-                  <span className="text-sm text-gray-100">Show trending only</span>
+                <div className="flex items-center justify-between rounded-lg border border-[#b88a22]/50 bg-black/70 px-3 py-2">
+                  <span className="text-sm text-[#f2d47a]">Show trending only</span>
                   <Switch
                     checked={trending}
                     onCheckedChange={(value) => setTrending(Boolean(value))}
-                    className="bg-gray-500 data-[state=checked]:bg-primary"
+                    className="golden-switch data-[state=checked]:bg-[#d4af37] data-[state=unchecked]:bg-[#3b2a0b] border-[#b88a22]/60"
                   />
                 </div>
               </div>
@@ -286,7 +291,7 @@ export default function SearchPage() {
               <Button
                 size="sm"
                 onClick={applyFilters}
-                className="bg-primary hover:bg-primary/90 text-xs md:text-sm"
+                className="bg-black text-[#d4af37] border border-[#b88a22]/60 shadow-[0_0_16px_rgba(212,175,55,0.3)] hover:bg-black/80 text-xs md:text-sm"
               >
                 Apply filters
               </Button>
@@ -294,7 +299,7 @@ export default function SearchPage() {
                 size="sm"
                 variant="ghost"
                 onClick={clearFilters}
-                className="border-white/20 text-gray-200 hover:bg-white/50 text-xs md:text-sm"
+                className="border-[#b88a22]/40 text-[#f2d47a] hover:bg-white/10 hover:text-[#f2d47a] text-xs md:text-sm"
               >
                 Clear all
               </Button>
