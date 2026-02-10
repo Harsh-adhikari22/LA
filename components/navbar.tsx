@@ -7,7 +7,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Menu, X, User, LogOut, LogIn, MapIcon, Package, Heart } from "lucide-react"
+import { Search, Menu, X, User, LogOut, LogIn, MapIcon, Package, Heart, Phone } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { usePathname, useRouter } from "next/navigation"
 import {
@@ -365,7 +365,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-md text-gray-700 hover:text-primary"
+            className="md:hidden p-2 rounded-md text-[#d4af37] hover:text-[#f2d47a]"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -373,54 +373,71 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 space-y-4 animate-slide-up">
+          <div className="md:hidden py-4 space-y-5 animate-slide-up border-t border-white/10">
             <form onSubmit={handleSearch} className="flex items-center space-x-2">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#d4af37] w-4 h-4" />
                 <Input
                   type="text"
-                  placeholder="Search party types, events..."
+                  placeholder="Planning something special?"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 focus:ring-primary focus:border-primary"
+                  className="pl-10 bg-black/60 text-[#f2d47a] border-[#b88a22]/60 placeholder:text-[#c9a949]/70 focus:ring-[#d4af37] focus:border-[#d4af37] hero-body"
                 />
               </div>
             </form>
 
             <div className="flex flex-col space-y-2">
-              <Link href="/plans" className="text-gray-700 hover:text-primary py-2">
-                Plans
+              <Link
+                href="/categories"
+                className="flex items-center gap-2 text-[#f2d47a] hover:text-black hover:bg-[#d4af37] py-2 px-3 rounded-lg transition-all rajdhani"
+              >
+                <MapIcon className="size-5 text-[#d4af37]" />
+                Categories
               </Link>
-              <Link href="/places" className="text-gray-700 hover:text-primary py-2">
-                Places
+              <Link
+                href="/cart"
+                className="flex items-center gap-2 text-[#f2d47a] hover:text-black hover:bg-[#d4af37] py-2 px-3 rounded-lg transition-all rajdhani"
+              >
+                <Package className="size-5 text-[#d4af37]" />
+                Cart
               </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-primary py-2">
+              <Link
+                href="/contact"
+                className="flex items-center gap-2 text-[#f2d47a] hover:text-black hover:bg-[#d4af37] py-2 px-3 rounded-lg transition-all rajdhani"
+              >
+                <Phone className="size-5 text-[#d4af37]" />
                 Contact
               </Link>
             </div>
 
-            <div className="flex flex-col space-y-2 pt-4 border-t">
+            <div className="flex flex-col space-y-2 pt-4 border-t border-white/10">
               {user ? (
                 <>
-                  <span className="text-sm text-gray-600">Welcome, {user.email?.split("@")[0]}</span>
-                  <Link href="/orders" className="text-gray-700 hover:text-primary py-2 flex items-center gap-2">
-                    <Package className="size-4" />
+                  <span className="text-sm text-[#c9a949]">Welcome, {user.email?.split("@")[0]}</span>
+                  <Link href="/orders" className="text-[#f2d47a] hover:text-black hover:bg-[#d4af37] py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
+                    <Package className="size-4 text-[#d4af37]" />
                     My Orders
                   </Link>
-                  <Link href="/wishlist" className="text-gray-700 hover:text-primary py-2 flex items-center gap-2">
-                    <Heart className="size-4" />
+                  <Link href="/wishlist" className="text-[#f2d47a] hover:text-black hover:bg-[#d4af37] py-2 px-3 rounded-lg flex items-center gap-2 transition-all">
+                    <Heart className="size-4 text-[#d4af37]" />
                     My Wishlist
                   </Link>
-                  <Button variant="ghost" size="sm" onClick={handleSignOut} className="justify-start">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="justify-start text-[#f2d47a] hover:text-black hover:bg-[#d4af37]"
+                  >
                     Sign Out
                   </Button>
                 </>
               ) : (
                 <>
-                  <Button variant="ghost" size="sm" asChild className="justify-start">
-                    <Link href="/auth/login">Sign In</Link>
+                  <Button variant="ghost" size="sm" asChild className="justify-start text-[#f2d47a] hover:text-black hover:bg-[#d4af37]">
+                    <Link href="/auth/login">Log In</Link>
                   </Button>
-                  <Button size="sm" asChild>
+                  <Button size="sm" asChild className="bg-[#d4af37] text-black hover:bg-[#f2d47a]">
                     <Link href="/auth/sign-up">Sign Up</Link>
                   </Button>
                 </>
